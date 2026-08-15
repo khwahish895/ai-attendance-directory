@@ -482,4 +482,103 @@ export interface AssignmentAiAnalysis {
   analyzed_at: string;
 }
 
+// ----------------------------------------------------
+// AI Absence Risk Predictor Module Types
+// ----------------------------------------------------
+
+export type AbsencePredictionOutcome = 'Likely Present' | 'Likely Absent';
+export type DayOfWeekName = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
+export type ActualOutcomeStatus = 'correct' | 'incorrect' | 'pending';
+
+export interface PredictionFactor {
+  text: string;
+  impact: 'positive' | 'negative' | 'neutral';
+  weight: number;
+}
+
+export interface RecoveryPlanData {
+  current_attendance: number;
+  target_attendance: number; // 75% default
+  classes_required: number;
+  action_summary: string;
+}
+
+export interface AbsencePredictionInput {
+  student_id: string;
+  student_name?: string;
+  roll_number?: string;
+  class_id: string;
+  subject_id: string;
+  target_date: string; // YYYY-MM-DD
+  overall_attendance_pct: number; // 0 to 100
+  subject_attendance_pct: number; // 0 to 100
+  recent_attendance_pct: number; // 0 to 100
+  classes_attended: number;
+  classes_missed: number;
+  total_classes: number;
+  absences_last_7_days: number;
+  absences_last_14_days: number;
+  absences_last_30_days: number;
+  consecutive_absences: number;
+  recent_streak: number; // consecutive present
+  previous_class_status: 'present' | 'absent';
+  day_of_week: DayOfWeekName;
+  day_of_week_absence_rate: number; // 0 to 100
+  trend: 'increasing' | 'stable' | 'declining';
+  // Optional behavioral factors
+  late_attendance_frequency?: number;
+  recent_leave_frequency?: number;
+  assignment_completion_rate?: number;
+  recent_academic_activity?: 'Healthy' | 'Moderate' | 'Low';
+}
+
+export interface AbsencePrediction {
+  id: string;
+  student_id: string;
+  subject_id: string;
+  class_id: string;
+  prediction_date: string; // ISO string
+  target_date: string; // YYYY-MM-DD
+  absence_probability: number; // 0 - 100
+  attendance_probability: number; // 0 - 100 (sum = 100)
+  prediction: AbsencePredictionOutcome;
+  risk_level: RiskLevel;
+  confidence: number; // 0 - 100
+  confidence_note: string;
+  explanation: string;
+  factors: PredictionFactor[];
+  recommendation: string;
+  algorithm_version: string; // e.g. "rule-based-absence-v1"
+  actual_result?: ActualOutcomeStatus;
+  evaluated_at?: string;
+  actual_attendance_status?: AttendanceStatus;
+  created_by?: string;
+  created_at: string;
+  recovery_plan?: RecoveryPlanData;
+  // Joined relation fields
+  student?: Student;
+  subject?: Subject;
+  class?: Class;
+}
+
+export interface PredictionPerformanceMetrics {
+  total_predictions: number;
+  evaluated_predictions: number;
+  pending_predictions: number;
+  correct_predictions: number;
+  incorrect_predictions: number;
+  present_predictions: number;
+  absent_predictions: number;
+  true_positives: number; // Predicted Absent, Actual Absent
+  true_negatives: number; // Predicted Present, Actual Present
+  false_positives: number; // Predicted Absent, Actual Present
+  false_negatives: number; // Predicted Present, Actual Absent
+  precision: number; // TP / (TP + FP)
+  recall: number; // TP / (TP + FN)
+  f1_score: number; // 2 * (P * R) / (P + R)
+  accuracy: number; // (TP + TN) / Evaluated
+  has_sufficient_data: boolean;
+}
+
+
 

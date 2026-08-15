@@ -78,13 +78,23 @@ export const TeacherDashboard: React.FC = () => {
           </p>
         </div>
 
-        <button
-          onClick={() => navigate('/teacher/attendance')}
-          className="px-5 py-3 rounded-2xl bg-gradient-to-r from-[#6E63FF] to-[#8677FF] hover:opacity-95 text-white text-xs font-bold shadow-lg shadow-[#6E63FF]/30 transition-all cursor-pointer flex items-center gap-2"
-        >
-          <CalendarCheck2 className="w-4 h-4" />
-          <span>Mark Class Attendance</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => navigate('/teacher/absence-predictor')}
+            className="px-4 py-3 rounded-2xl bg-[#050816] hover:bg-[#6E63FF]/20 text-[#8677FF] hover:text-white border border-[#6E63FF]/30 text-xs font-bold transition-all cursor-pointer flex items-center gap-2 shadow-md"
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>AI Absence Predictor</span>
+          </button>
+
+          <button
+            onClick={() => navigate('/teacher/attendance')}
+            className="px-5 py-3 rounded-2xl bg-gradient-to-r from-[#6E63FF] to-[#8677FF] hover:opacity-95 text-white text-xs font-bold shadow-lg shadow-[#6E63FF]/30 transition-all cursor-pointer flex items-center gap-2"
+          >
+            <CalendarCheck2 className="w-4 h-4" />
+            <span>Mark Attendance</span>
+          </button>
+        </div>
       </div>
 
       {/* Metrics */}

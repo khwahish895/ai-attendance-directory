@@ -43,6 +43,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
       case 'administrator':
         return [
           { label: 'Admin Dashboard', to: '/admin', icon: LayoutDashboard },
+          { label: 'AI Absence Risk Predictor', to: '/admin/absence-predictor', icon: Cpu },
           { label: 'Students Directory', to: '/admin/students', icon: GraduationCap },
           { label: 'Faculty & Teachers', to: '/admin/teachers', icon: UserCheck },
           { label: 'Parents & Guardians', to: '/admin/parents', icon: Users },
@@ -61,6 +62,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
       case 'teacher':
         return [
           { label: 'Teacher Dashboard', to: '/teacher', icon: LayoutDashboard },
+          { label: 'AI Absence Risk Predictor', to: '/teacher/absence-predictor', icon: Cpu },
           { label: 'Notes & Study Material', to: '/teacher/materials', icon: BookOpen },
           { label: 'Assignments & Grading', to: '/teacher/assignments', icon: FileSpreadsheet },
           { label: 'Student Doubts & Q/A', to: '/teacher/doubts', icon: HelpCircle },
@@ -75,6 +77,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
       case 'student':
         return [
           { label: 'Student Dashboard', to: '/student', icon: LayoutDashboard },
+          { label: 'Upcoming Class Risk Predictor', to: '/student/absence-predictor', icon: Cpu },
           { label: 'Learning & Assignments', to: '/student/learning', icon: BookOpen },
           { label: 'My Attendance Logs', to: '/student/attendance', icon: CalendarCheck2 },
           { label: 'Subject Breakdown', to: '/student/subjects', icon: Layers },
@@ -88,11 +91,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
       case 'parent':
         return [
           { label: 'Parent Portal', to: '/parent', icon: LayoutDashboard },
+          { label: 'Upcoming Absence Forecast', to: '/parent/prediction', icon: Cpu },
           { label: 'Ward Learning & Work', to: '/parent/learning', icon: BookOpen },
           { label: 'Ward Profile & Stats', to: '/parent/student', icon: GraduationCap },
           { label: 'Subject Attendance', to: '/parent/attendance', icon: Layers },
           { label: 'Risk Analysis', to: '/parent/risk', icon: ShieldAlert },
-          { label: 'Attendance Forecast', to: '/parent/prediction', icon: Cpu },
           { label: 'Recommendations', to: '/parent/recommendations', icon: Lightbulb },
           { label: 'Alerts & Notices', to: '/parent/notifications', icon: Bell },
         ];

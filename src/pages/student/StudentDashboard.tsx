@@ -140,6 +140,13 @@ export const StudentDashboard: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => navigate('/student/absence-predictor')}
+            className="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-[#6E63FF] to-[#8677FF] hover:opacity-90 text-white text-xs font-bold shadow-lg shadow-[#6E63FF]/30 flex items-center gap-2 transition-all cursor-pointer"
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>Upcoming Class Risk</span>
+          </button>
           <div className="text-right">
             <div className="text-[10px] text-slate-400 uppercase font-semibold">Institutional Status</div>
             <div className="text-xs font-bold text-emerald-400 flex items-center gap-1.5 justify-end">

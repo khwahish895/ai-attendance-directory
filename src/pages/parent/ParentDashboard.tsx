@@ -121,6 +121,14 @@ export const ParentDashboard: React.FC = () => {
 
         <div className="flex items-center gap-3">
           <button
+            onClick={() => navigate('/parent/prediction')}
+            className="px-4 py-3 rounded-2xl bg-[#050816] hover:bg-[#6E63FF]/20 text-[#8677FF] hover:text-white border border-[#6E63FF]/30 text-xs font-bold shadow-lg transition-all cursor-pointer flex items-center gap-2"
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>Upcoming Absence Forecast</span>
+          </button>
+
+          <button
             onClick={() => setIsCopilotOpen(true)}
             className="px-4 py-3 rounded-2xl bg-[#050816] hover:bg-white/5 text-white border border-indigo-900/60 text-xs font-bold shadow-lg transition-all cursor-pointer flex items-center gap-2"
           >

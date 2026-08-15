@@ -24,6 +24,9 @@ import {
   ProblemResponse,
   ProblemStatus,
   AcademicActivitySummary,
+  AbsencePrediction,
+  AttendanceStatus,
+  RiskLevel,
 } from '../types';
 import { computeRiskAssessment } from '../services/riskService';
 import { predictStudentAttendance } from '../services/predictionService';
@@ -1090,6 +1093,379 @@ function generateInitialData() {
     },
   ];
 
+  // Realistic Initial AI Absence Predictions (Historical evaluated & Upcoming)
+  const absencePredictions: AbsencePrediction[] = [
+    {
+      id: 'pred-abs-eval-1',
+      student_id: 'stud-4', // Liam Johnson (High Risk)
+      subject_id: 'sub-1',
+      class_id: 'cls-1',
+      prediction_date: '2026-08-01T08:30:00Z',
+      target_date: '2026-08-03',
+      absence_probability: 78,
+      attendance_probability: 22,
+      prediction: 'Likely Absent',
+      risk_level: 'HIGH',
+      confidence: 86,
+      confidence_note: 'Confidence is based on the amount and consistency of available historical attendance data.',
+      explanation: 'High absence probability (78%) driven by declining attendance, recent misses, and previous absent record.',
+      factors: [
+        { text: 'Attendance is below 75% (67.2%)', impact: 'negative', weight: 8.2 },
+        { text: 'Recent attendance dropped to 60%', impact: 'negative', weight: 8.0 },
+        { text: '2 absences in the last 7 days', impact: 'negative', weight: 6.6 },
+        { text: 'Attendance trend is declining recently', impact: 'negative', weight: 8.8 },
+        { text: 'Previous class attendance was absent', impact: 'negative', weight: 4.2 },
+      ],
+      recommendation: 'High absence probability detected. Consider contacting the student before the upcoming class.',
+      algorithm_version: 'rule-based-absence-v1',
+      actual_result: 'correct',
+      actual_attendance_status: 'absent',
+      evaluated_at: '2026-08-03T18:00:00Z',
+      created_at: '2026-08-01T08:30:00Z',
+      recovery_plan: {
+        current_attendance: 67.2,
+        target_attendance: 75,
+        classes_required: 8,
+        action_summary: 'Attend next 8 consecutive classes without unexcused absences to restore standing to >= 75%.',
+      },
+    },
+    {
+      id: 'pred-abs-eval-2',
+      student_id: 'stud-5', // Mia Rodriguez (High Risk)
+      subject_id: 'sub-1',
+      class_id: 'cls-1',
+      prediction_date: '2026-08-01T08:30:00Z',
+      target_date: '2026-08-03',
+      absence_probability: 84,
+      attendance_probability: 16,
+      prediction: 'Likely Absent',
+      risk_level: 'HIGH',
+      confidence: 88,
+      confidence_note: 'Confidence is based on the amount and consistency of available historical attendance data.',
+      explanation: 'High absence probability (84%) driven by consecutive absences and declining attendance trajectory.',
+      factors: [
+        { text: 'Attendance is below 75% (62.0%)', impact: 'negative', weight: 9.5 },
+        { text: 'Recent attendance dropped to 50%', impact: 'negative', weight: 10.0 },
+        { text: '4 consecutive absences leading into this class', impact: 'negative', weight: 15.0 },
+        { text: 'Previous class attendance was absent', impact: 'negative', weight: 4.2 },
+      ],
+      recommendation: 'Immediate parental notification advised. High likelihood of missing scheduled lecture.',
+      algorithm_version: 'rule-based-absence-v1',
+      actual_result: 'correct',
+      actual_attendance_status: 'absent',
+      evaluated_at: '2026-08-03T18:00:00Z',
+      created_at: '2026-08-01T08:30:00Z',
+    },
+    {
+      id: 'pred-abs-eval-3',
+      student_id: 'stud-1', // Alex Mercer (Healthy)
+      subject_id: 'sub-1',
+      class_id: 'cls-1',
+      prediction_date: '2026-08-01T08:30:00Z',
+      target_date: '2026-08-03',
+      absence_probability: 8,
+      attendance_probability: 92,
+      prediction: 'Likely Present',
+      risk_level: 'LOW',
+      confidence: 90,
+      confidence_note: 'Confidence is based on the amount and consistency of available historical attendance data.',
+      explanation: 'High probability of attendance (92%) supported by solid attendance patterns and positive session consistency.',
+      factors: [
+        { text: 'Overall attendance is strong and healthy (94.0%)', impact: 'positive', weight: 1.5 },
+        { text: 'Recent session consistency is high (100%)', impact: 'positive', weight: 0 },
+        { text: 'Zero absences in the past 7 days', impact: 'positive', weight: 0 },
+        { text: 'Active present streak of 6 sessions', impact: 'positive', weight: 0 },
+      ],
+      recommendation: 'The student has a strong attendance pattern and is likely to attend the upcoming class.',
+      algorithm_version: 'rule-based-absence-v1',
+      actual_result: 'correct',
+      actual_attendance_status: 'present',
+      evaluated_at: '2026-08-03T18:00:00Z',
+      created_at: '2026-08-01T08:30:00Z',
+    },
+    {
+      id: 'pred-abs-eval-4',
+      student_id: 'stud-2', // Sophia Chen (Healthy)
+      subject_id: 'sub-1',
+      class_id: 'cls-1',
+      prediction_date: '2026-08-01T08:30:00Z',
+      target_date: '2026-08-03',
+      absence_probability: 14,
+      attendance_probability: 86,
+      prediction: 'Likely Present',
+      risk_level: 'LOW',
+      confidence: 86,
+      confidence_note: 'Confidence is based on the amount and consistency of available historical attendance data.',
+      explanation: 'High probability of attendance (86%) supported by solid attendance patterns.',
+      factors: [
+        { text: 'Overall attendance is strong and healthy (88.0%)', impact: 'positive', weight: 3.0 },
+        { text: 'Zero absences in the past 7 days', impact: 'positive', weight: 0 },
+      ],
+      recommendation: 'The student has a strong attendance pattern and is likely to attend the upcoming class.',
+      algorithm_version: 'rule-based-absence-v1',
+      actual_result: 'correct',
+      actual_attendance_status: 'present',
+      evaluated_at: '2026-08-03T18:00:00Z',
+      created_at: '2026-08-01T08:30:00Z',
+    },
+    {
+      id: 'pred-abs-eval-5',
+      student_id: 'stud-6', // Noah Williams (Medium/Declining)
+      subject_id: 'sub-1',
+      class_id: 'cls-2',
+      prediction_date: '2026-08-01T08:30:00Z',
+      target_date: '2026-08-03',
+      absence_probability: 54,
+      attendance_probability: 46,
+      prediction: 'Likely Absent',
+      risk_level: 'MEDIUM',
+      confidence: 80,
+      confidence_note: 'Confidence is based on the amount and consistency of available historical attendance data.',
+      explanation: 'Moderate-high probability of absence (54%) detected based on recent attendance volatility.',
+      factors: [
+        { text: 'Recent attendance dropped to 65%', impact: 'negative', weight: 7.0 },
+        { text: 'Attendance trend is declining recently', impact: 'negative', weight: 8.8 },
+      ],
+      recommendation: 'The student recent attendance pattern shows moderate absence risk. Regular attendance is recommended.',
+      algorithm_version: 'rule-based-absence-v1',
+      actual_result: 'incorrect', // False Positive (Predicted Absent, but student showed up!)
+      actual_attendance_status: 'present',
+      evaluated_at: '2026-08-03T18:00:00Z',
+      created_at: '2026-08-01T08:30:00Z',
+    },
+    {
+      id: 'pred-abs-eval-6',
+      student_id: 'stud-3', // Ethan Davis (Borderline)
+      subject_id: 'sub-2',
+      class_id: 'cls-1',
+      prediction_date: '2026-08-05T08:30:00Z',
+      target_date: '2026-08-07',
+      absence_probability: 44,
+      attendance_probability: 56,
+      prediction: 'Likely Present',
+      risk_level: 'MEDIUM',
+      confidence: 82,
+      confidence_note: 'Confidence is based on the amount and consistency of available historical attendance data.',
+      explanation: 'Projected to attend (56%), though recent trends should be monitored to maintain good standing.',
+      factors: [
+        { text: 'Overall attendance is satisfactory (79.0%)', impact: 'neutral', weight: 5.2 },
+        { text: 'Attendance trend remains stable', impact: 'neutral', weight: 3.5 },
+      ],
+      recommendation: 'The student recent attendance pattern shows moderate absence risk. Regular attendance is recommended.',
+      algorithm_version: 'rule-based-absence-v1',
+      actual_result: 'correct',
+      actual_attendance_status: 'present',
+      evaluated_at: '2026-08-07T18:00:00Z',
+      created_at: '2026-08-05T08:30:00Z',
+    },
+    {
+      id: 'pred-abs-eval-7',
+      student_id: 'stud-8', // Lucas Miller (Critical)
+      subject_id: 'sub-3',
+      class_id: 'cls-3',
+      prediction_date: '2026-08-05T08:30:00Z',
+      target_date: '2026-08-07',
+      absence_probability: 88,
+      attendance_probability: 12,
+      prediction: 'Likely Absent',
+      risk_level: 'HIGH',
+      confidence: 90,
+      confidence_note: 'Confidence is based on the amount and consistency of available historical attendance data.',
+      explanation: 'Critical absence risk (88%). Student missed frequent sessions across all subjects.',
+      factors: [
+        { text: 'Attendance is below 75% (58.0%)', impact: 'negative', weight: 10.5 },
+        { text: '3 absences in the last 7 days', impact: 'negative', weight: 9.9 },
+        { text: 'Previous class attendance was absent', impact: 'negative', weight: 4.2 },
+      ],
+      recommendation: 'Immediate formal intervention required. Critical risk of failing credit requirement.',
+      algorithm_version: 'rule-based-absence-v1',
+      actual_result: 'correct',
+      actual_attendance_status: 'absent',
+      evaluated_at: '2026-08-07T18:00:00Z',
+      created_at: '2026-08-05T08:30:00Z',
+    },
+    {
+      id: 'pred-abs-eval-8',
+      student_id: 'stud-7', // Emma Watson
+      subject_id: 'sub-2',
+      class_id: 'cls-2',
+      prediction_date: '2026-08-05T08:30:00Z',
+      target_date: '2026-08-07',
+      absence_probability: 12,
+      attendance_probability: 88,
+      prediction: 'Likely Present',
+      risk_level: 'LOW',
+      confidence: 88,
+      confidence_note: 'Confidence is based on the amount and consistency of available historical attendance data.',
+      explanation: 'High probability of attendance (88%) supported by solid attendance patterns.',
+      factors: [
+        { text: 'Overall attendance is strong and healthy (92.0%)', impact: 'positive', weight: 2.0 },
+      ],
+      recommendation: 'The student has a strong attendance pattern and is likely to attend the upcoming class.',
+      algorithm_version: 'rule-based-absence-v1',
+      actual_result: 'correct',
+      actual_attendance_status: 'present',
+      evaluated_at: '2026-08-07T18:00:00Z',
+      created_at: '2026-08-05T08:30:00Z',
+    },
+    // Upcoming Active Predictions (Tomorrow & Next Week)
+    {
+      id: 'pred-abs-live-1',
+      student_id: 'stud-4', // Liam Johnson
+      subject_id: 'sub-1', // AI & ML
+      class_id: 'cls-1',
+      prediction_date: '2026-08-15T09:00:00Z',
+      target_date: '2026-08-18', // Monday
+      absence_probability: 76,
+      attendance_probability: 24,
+      prediction: 'Likely Absent',
+      risk_level: 'HIGH',
+      confidence: 86,
+      confidence_note: 'Confidence is based on the amount and consistency of available historical attendance data.',
+      explanation: 'High absence probability (76%) detected on upcoming Monday session with declining trajectory.',
+      factors: [
+        { text: 'Attendance is below 75% (67.2%)', impact: 'negative', weight: 8.2 },
+        { text: 'Recent attendance dropped to 62.5%', impact: 'negative', weight: 7.5 },
+        { text: '2 absences in the last 7 days', impact: 'negative', weight: 6.6 },
+        { text: 'Monday historically has high absence frequency (40% miss rate)', impact: 'negative', weight: 2.0 },
+        { text: 'Attendance trend is declining recently', impact: 'negative', weight: 8.8 },
+      ],
+      recommendation: 'High absence probability detected. Consider contacting the student before the upcoming class.',
+      algorithm_version: 'rule-based-absence-v1',
+      actual_result: 'pending',
+      created_at: '2026-08-15T09:00:00Z',
+      recovery_plan: {
+        current_attendance: 67.2,
+        target_attendance: 75,
+        classes_required: 8,
+        action_summary: 'Attend next 8 consecutive classes without unexcused absences to restore standing to >= 75%.',
+      },
+    },
+    {
+      id: 'pred-abs-live-2',
+      student_id: 'stud-5', // Mia Rodriguez
+      subject_id: 'sub-1',
+      class_id: 'cls-1',
+      prediction_date: '2026-08-15T09:00:00Z',
+      target_date: '2026-08-18',
+      absence_probability: 82,
+      attendance_probability: 18,
+      prediction: 'Likely Absent',
+      risk_level: 'HIGH',
+      confidence: 88,
+      confidence_note: 'Confidence is based on the amount and consistency of available historical attendance data.',
+      explanation: 'Critical absence risk (82%). 4 consecutive absences logged leading into next session.',
+      factors: [
+        { text: 'Attendance is below 75% (62.0%)', impact: 'negative', weight: 9.5 },
+        { text: 'Recent attendance dropped to 50%', impact: 'negative', weight: 10.0 },
+        { text: '4 consecutive absences leading into this class', impact: 'negative', weight: 15.0 },
+        { text: 'Previous class attendance was absent', impact: 'negative', weight: 4.2 },
+      ],
+      recommendation: 'High absence probability detected. Consider contacting the student and parent before the upcoming class.',
+      algorithm_version: 'rule-based-absence-v1',
+      actual_result: 'pending',
+      created_at: '2026-08-15T09:00:00Z',
+      recovery_plan: {
+        current_attendance: 62.0,
+        target_attendance: 75,
+        classes_required: 12,
+        action_summary: 'Attend next 12 consecutive classes without unexcused absences to restore standing to >= 75%.',
+      },
+    },
+    {
+      id: 'pred-abs-live-3',
+      student_id: 'stud-6', // Noah Williams
+      subject_id: 'sub-1',
+      class_id: 'cls-2',
+      prediction_date: '2026-08-15T09:00:00Z',
+      target_date: '2026-08-18',
+      absence_probability: 58,
+      attendance_probability: 42,
+      prediction: 'Likely Absent',
+      risk_level: 'MEDIUM',
+      confidence: 82,
+      confidence_note: 'Confidence is based on the amount and consistency of available historical attendance data.',
+      explanation: 'Moderate-high probability of absence (58%) detected based on recent attendance volatility.',
+      factors: [
+        { text: 'Recent attendance dropped to 62.5%', impact: 'negative', weight: 7.5 },
+        { text: 'Attendance trend is declining recently', impact: 'negative', weight: 8.8 },
+      ],
+      recommendation: "The student's recent attendance pattern shows moderate absence risk. Regular attendance is recommended.",
+      algorithm_version: 'rule-based-absence-v1',
+      actual_result: 'pending',
+      created_at: '2026-08-15T09:00:00Z',
+    },
+    {
+      id: 'pred-abs-live-4',
+      student_id: 'stud-3', // Ethan Davis
+      subject_id: 'sub-1',
+      class_id: 'cls-1',
+      prediction_date: '2026-08-15T09:00:00Z',
+      target_date: '2026-08-18',
+      absence_probability: 38,
+      attendance_probability: 62,
+      prediction: 'Likely Present',
+      risk_level: 'LOW',
+      confidence: 82,
+      confidence_note: 'Confidence is based on the amount and consistency of available historical attendance data.',
+      explanation: 'Projected to attend (62%), though borderline overall standing warrants attention.',
+      factors: [
+        { text: 'Overall attendance is satisfactory (79.0%)', impact: 'neutral', weight: 5.2 },
+        { text: 'Attended the immediately preceding class', impact: 'positive', weight: 0.6 },
+      ],
+      recommendation: 'The student has a strong attendance pattern and is likely to attend the upcoming class.',
+      algorithm_version: 'rule-based-absence-v1',
+      actual_result: 'pending',
+      created_at: '2026-08-15T09:00:00Z',
+    },
+    {
+      id: 'pred-abs-live-5',
+      student_id: 'stud-1', // Alex Mercer
+      subject_id: 'sub-1',
+      class_id: 'cls-1',
+      prediction_date: '2026-08-15T09:00:00Z',
+      target_date: '2026-08-18',
+      absence_probability: 6,
+      attendance_probability: 94,
+      prediction: 'Likely Present',
+      risk_level: 'LOW',
+      confidence: 92,
+      confidence_note: 'Confidence is based on the amount and consistency of available historical attendance data.',
+      explanation: 'High probability of attendance (94%) supported by solid attendance patterns.',
+      factors: [
+        { text: 'Overall attendance is strong and healthy (94.0%)', impact: 'positive', weight: 1.5 },
+        { text: 'Recent session consistency is high (100%)', impact: 'positive', weight: 0 },
+        { text: 'Zero absences in the past 7 days', impact: 'positive', weight: 0 },
+      ],
+      recommendation: 'The student has a strong attendance pattern and is likely to attend the upcoming class.',
+      algorithm_version: 'rule-based-absence-v1',
+      actual_result: 'pending',
+      created_at: '2026-08-15T09:00:00Z',
+    },
+    {
+      id: 'pred-abs-live-6',
+      student_id: 'stud-2', // Sophia Chen
+      subject_id: 'sub-1',
+      class_id: 'cls-1',
+      prediction_date: '2026-08-15T09:00:00Z',
+      target_date: '2026-08-18',
+      absence_probability: 12,
+      attendance_probability: 88,
+      prediction: 'Likely Present',
+      risk_level: 'LOW',
+      confidence: 88,
+      confidence_note: 'Confidence is based on the amount and consistency of available historical attendance data.',
+      explanation: 'High probability of attendance (88%) supported by solid attendance patterns.',
+      factors: [
+        { text: 'Overall attendance is strong and healthy (88.0%)', impact: 'positive', weight: 3.0 },
+      ],
+      recommendation: 'The student has a strong attendance pattern and is likely to attend the upcoming class.',
+      algorithm_version: 'rule-based-absence-v1',
+      actual_result: 'pending',
+      created_at: '2026-08-15T09:00:00Z',
+    },
+  ];
+
   return {
     institutions,
     profiles,
@@ -1112,6 +1488,7 @@ function generateInitialData() {
     assignmentSubmissions,
     studentProblems,
     problemResponses,
+    absencePredictions,
   };
 }
 
@@ -1139,6 +1516,7 @@ class DataStore {
           assignmentSubmissions: parsed.assignmentSubmissions && parsed.assignmentSubmissions.length > 0 ? parsed.assignmentSubmissions : initial.assignmentSubmissions,
           studentProblems: parsed.studentProblems && parsed.studentProblems.length > 0 ? parsed.studentProblems : initial.studentProblems,
           problemResponses: parsed.problemResponses && parsed.problemResponses.length > 0 ? parsed.problemResponses : initial.problemResponses,
+          absencePredictions: parsed.absencePredictions && parsed.absencePredictions.length > 0 ? parsed.absencePredictions : initial.absencePredictions,
         };
       }
     } catch (e) {
@@ -3070,7 +3448,243 @@ class DataStore {
   public getAllAcademicActivitySummaries(): AcademicActivitySummary[] {
     return this.getStudents().map(st => this.getAcademicActivitySummary(st.id));
   }
+
+  // --------------------------------------------------------------------------
+  // AI ABSENCE RISK PREDICTION METHODS
+  // --------------------------------------------------------------------------
+
+  public getAbsencePredictions(filters?: {
+    studentId?: string;
+    classId?: string;
+    subjectId?: string;
+    riskLevel?: RiskLevel;
+    prediction?: 'Likely Present' | 'Likely Absent';
+    targetDate?: string;
+    actualResult?: string;
+    search?: string;
+  }): AbsencePrediction[] {
+    let list = [...(this.data.absencePredictions || [])];
+
+    if (filters?.studentId) {
+      list = list.filter(p => p.student_id === filters.studentId);
+    }
+    if (filters?.classId && filters.classId !== 'all') {
+      list = list.filter(p => p.class_id === filters.classId);
+    }
+    if (filters?.subjectId && filters.subjectId !== 'all') {
+      list = list.filter(p => p.subject_id === filters.subjectId);
+    }
+    if (filters?.riskLevel && filters.riskLevel !== 'ALL' as any) {
+      list = list.filter(p => p.risk_level === filters.riskLevel);
+    }
+    if (filters?.prediction && filters.prediction !== 'ALL' as any) {
+      list = list.filter(p => p.prediction === filters.prediction);
+    }
+    if (filters?.targetDate) {
+      list = list.filter(p => p.target_date === filters.targetDate);
+    }
+    if (filters?.actualResult && filters.actualResult !== 'all') {
+      list = list.filter(p => p.actual_result === filters.actualResult);
+    }
+
+    return list
+      .map(p => ({
+        ...p,
+        student: this.getStudentById(p.student_id),
+        subject: this.getSubjectById(p.subject_id),
+        class: this.getClassById(p.class_id),
+      }))
+      .filter(p => {
+        if (filters?.search) {
+          const q = filters.search.toLowerCase();
+          const name = p.student?.profile?.full_name?.toLowerCase() || '';
+          const roll = p.student?.roll_number?.toLowerCase() || '';
+          const subName = p.subject?.name?.toLowerCase() || '';
+          return name.includes(q) || roll.includes(q) || subName.includes(q);
+        }
+        return true;
+      })
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  }
+
+  public getAbsencePredictionById(id: string): AbsencePrediction | undefined {
+    const p = this.data.absencePredictions?.find(item => item.id === id);
+    if (!p) return undefined;
+    return {
+      ...p,
+      student: this.getStudentById(p.student_id),
+      subject: this.getSubjectById(p.subject_id),
+      class: this.getClassById(p.class_id),
+    };
+  }
+
+  public saveAbsencePrediction(
+    prediction: AbsencePrediction,
+    actor?: { id: string; name: string; role: UserRole }
+  ): AbsencePrediction {
+    if (!this.data.absencePredictions) this.data.absencePredictions = [];
+
+    // Replace if exact match for student + subject + target_date, or push new
+    const existingIdx = this.data.absencePredictions.findIndex(
+      p =>
+        p.student_id === prediction.student_id &&
+        p.subject_id === prediction.subject_id &&
+        p.target_date === prediction.target_date
+    );
+
+    if (existingIdx >= 0) {
+      this.data.absencePredictions[existingIdx] = {
+        ...this.data.absencePredictions[existingIdx],
+        ...prediction,
+      };
+    } else {
+      this.data.absencePredictions.unshift(prediction);
+    }
+
+    // Auto-generate notification if HIGH risk (>= 70%)
+    if (prediction.risk_level === 'HIGH' || prediction.absence_probability >= 70) {
+      const student = this.getStudentById(prediction.student_id);
+      const subject = this.getSubjectById(prediction.subject_id);
+      const studentName = student?.profile?.full_name || 'Student';
+      const subjectName = subject?.name || 'Class';
+
+      // Notification for Student
+      if (student?.profile_id) {
+        this.data.notifications.unshift({
+          id: `notif-pred-stud-${Date.now()}`,
+          recipient_profile_id: student.profile_id,
+          title: `Absence Risk Alert for ${subjectName}`,
+          message: `Predictor calculated a ${prediction.absence_probability}% probability of missing class on ${prediction.target_date}. Please plan to attend.`,
+          type: 'warning',
+          is_read: false,
+          created_at: new Date().toISOString(),
+          link: '/student/absence-predictor',
+        });
+      }
+
+      // Notification for Parent
+      if (student?.parent?.profile_id) {
+        this.data.notifications.unshift({
+          id: `notif-pred-parent-${Date.now()}`,
+          recipient_profile_id: student.parent.profile_id,
+          title: `Upcoming Attendance Risk: ${studentName}`,
+          message: `Statistical model projects high absence probability (${prediction.absence_probability}%) for ${studentName} on ${prediction.target_date} (${subjectName}).`,
+          type: 'warning',
+          is_read: false,
+          created_at: new Date().toISOString(),
+          link: '/parent/prediction',
+        });
+      }
+
+      // System alert
+      this.data.alerts.unshift({
+        id: `alert-pred-${Date.now()}`,
+        student_id: prediction.student_id,
+        type: 'prediction_warning',
+        severity: 'high',
+        title: `High Absence Probability: ${studentName}`,
+        message: `Projected ${prediction.absence_probability}% probability of absence on ${prediction.target_date} for ${subjectName}.`,
+        is_read: false,
+        created_at: new Date().toISOString(),
+      });
+    }
+
+    if (actor) {
+      this.logAuditAction(
+        actor.id,
+        actor.name,
+        actor.role,
+        'Generated Absence Prediction',
+        'AbsencePrediction',
+        prediction.id,
+        `Ran statistical absence prediction for ${prediction.student_id} on ${prediction.target_date}. Result: ${prediction.prediction} (${prediction.absence_probability}%).`
+      );
+    }
+
+    this.notify();
+    return this.getAbsencePredictionById(prediction.id)!;
+  }
+
+  public batchSaveAbsencePredictions(
+    predictions: AbsencePrediction[],
+    actor?: { id: string; name: string; role: UserRole }
+  ): { success: boolean; count: number } {
+    if (!this.data.absencePredictions) this.data.absencePredictions = [];
+
+    predictions.forEach(pred => {
+      const existingIdx = this.data.absencePredictions.findIndex(
+        p =>
+          p.student_id === pred.student_id &&
+          p.subject_id === pred.subject_id &&
+          p.target_date === pred.target_date
+      );
+
+      if (existingIdx >= 0) {
+        this.data.absencePredictions[existingIdx] = {
+          ...this.data.absencePredictions[existingIdx],
+          ...pred,
+        };
+      } else {
+        this.data.absencePredictions.unshift(pred);
+      }
+    });
+
+    if (actor) {
+      this.logAuditAction(
+        actor.id,
+        actor.name,
+        actor.role,
+        'Batch Absence Predictions Generated',
+        'AbsencePrediction',
+        predictions[0]?.class_id,
+        `Generated ${predictions.length} absence predictions for class ${predictions[0]?.class_id} on ${predictions[0]?.target_date}.`
+      );
+    }
+
+    this.notify();
+    return { success: true, count: predictions.length };
+  }
+
+  public evaluateAbsencePrediction(
+    id: string,
+    actualStatus: AttendanceStatus,
+    actor?: { id: string; name: string; role: UserRole }
+  ): AbsencePrediction | undefined {
+    const pred = this.getAbsencePredictionById(id);
+    if (!pred) return undefined;
+
+    const isActualAbsent = actualStatus === 'absent';
+    const isPredictedAbsent = pred.prediction === 'Likely Absent';
+    const isCorrect =
+      (isPredictedAbsent && isActualAbsent) || (!isPredictedAbsent && !isActualAbsent);
+
+    const idx = this.data.absencePredictions.findIndex(p => p.id === id);
+    if (idx !== -1) {
+      this.data.absencePredictions[idx] = {
+        ...this.data.absencePredictions[idx],
+        actual_result: isCorrect ? 'correct' : 'incorrect',
+        actual_attendance_status: actualStatus,
+        evaluated_at: new Date().toISOString(),
+      };
+    }
+
+    if (actor) {
+      this.logAuditAction(
+        actor.id,
+        actor.name,
+        actor.role,
+        'Evaluated Absence Prediction',
+        'AbsencePrediction',
+        id,
+        `Evaluated prediction #${id}: Actual=${actualStatus}, Predicted=${pred.prediction} => Result: ${isCorrect ? 'Correct' : 'Incorrect'}.`
+      );
+    }
+
+    this.notify();
+    return this.getAbsencePredictionById(id);
+  }
 }
 
 export const dataStore = new DataStore();
+
 
