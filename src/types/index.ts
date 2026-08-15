@@ -5,7 +5,16 @@ export type AttendanceStatus = 'present' | 'absent';
 export type TrendDirection = 'improving' | 'declining' | 'stable';
 export type AlertSeverity = 'low' | 'medium' | 'high';
 export type AlertType = 'low_attendance' | 'high_risk' | 'consecutive_absence' | 'declining_trend' | 'prediction_warning';
-export type NotificationType = 'alert' | 'system' | 'attendance' | 'report';
+export type NotificationType =
+  | 'alert'
+  | 'system'
+  | 'attendance'
+  | 'attendance_alert'
+  | 'report'
+  | 'recommendation'
+  | 'warning'
+  | 'assignment'
+  | 'doubt';
 
 export interface Profile {
   id: string;
@@ -229,3 +238,166 @@ export interface Recommendation {
   actionable_steps: string[];
   target_audience: 'student' | 'teacher' | 'parent' | 'admin';
 }
+
+// ----------------------------------------------------
+// Learning Management Module Types
+// ----------------------------------------------------
+
+export type MaterialType = 'note' | 'pdf' | 'presentation' | 'document' | 'image' | 'video' | 'link' | 'other';
+
+export interface LearningMaterial {
+  id: string;
+  teacher_id: string;
+  class_id: string;
+  subject_id: string;
+  title: string;
+  description: string;
+  topic: string;
+  material_type: MaterialType;
+  file_name?: string;
+  file_path?: string;
+  file_url?: string;
+  file_size?: number; // In bytes
+  mime_type?: string;
+  external_url?: string;
+  content_text?: string;
+  is_published: boolean;
+  view_count?: number;
+  created_at: string;
+  updated_at: string;
+  // Joined relations
+  teacher?: Teacher;
+  subject?: Subject;
+  class?: Class;
+}
+
+export type AssignmentSubmissionType = 'file' | 'text' | 'both';
+export type SubmissionType = AssignmentSubmissionType;
+export type AssignmentStatus = 'draft' | 'published' | 'closed';
+
+export interface Assignment {
+  id: string;
+  teacher_id: string;
+  class_id: string;
+  subject_id: string;
+  title: string;
+  description: string;
+  instructions: string;
+  topic?: string;
+  attachment_name?: string;
+  attachment_path?: string;
+  attachment_url?: string;
+  attachment_size?: number;
+  start_date: string;
+  due_date: string; // ISO string with timestamp
+  max_marks: number;
+  submission_type: AssignmentSubmissionType;
+  allowed_formats?: string[];
+  is_published?: boolean;
+  status: AssignmentStatus;
+  allow_resubmission?: boolean;
+  created_at: string;
+  updated_at: string;
+  // Joined relations
+  teacher?: Teacher;
+  subject?: Subject;
+  class?: Class;
+  submission_count?: number;
+  graded_count?: number;
+}
+
+export type SubmissionStatus = 'not_started' | 'in_progress' | 'submitted' | 'late' | 'graded' | 'returned';
+
+export interface AssignmentSubmission {
+  id: string;
+  assignment_id: string;
+  student_id: string;
+  file_path?: string;
+  file_url?: string;
+  file_name?: string;
+  file_size?: number;
+  mime_type?: string;
+  text_submission?: string;
+  comments?: string;
+  submitted_at: string;
+  status: SubmissionStatus;
+  is_late: boolean;
+  marks?: number;
+  feedback?: string;
+  graded_by?: string;
+  graded_at?: string;
+  returned_at?: string;
+  created_at: string;
+  updated_at: string;
+  // Joined relations
+  student?: Student;
+  assignment?: Assignment;
+  grader?: Teacher;
+}
+
+export type ProblemCategory =
+  | 'concept_doubt'
+  | 'assignment_problem'
+  | 'attendance_issue'
+  | 'subject_difficulty'
+  | 'technical_issue'
+  | 'study_related'
+  | 'other';
+
+export type ProblemPriority = 'low' | 'medium' | 'high';
+export type ProblemStatus = 'open' | 'in_progress' | 'resolved' | 'closed';
+
+export interface StudentProblem {
+  id: string;
+  student_id: string;
+  teacher_id?: string;
+  subject_id: string;
+  class_id?: string;
+  title: string;
+  description: string;
+  category: ProblemCategory;
+  priority: ProblemPriority;
+  topic?: string;
+  attachment_name?: string;
+  attachment_path?: string;
+  attachment_url?: string;
+  attachment_size?: number;
+  status: ProblemStatus;
+  created_at: string;
+  updated_at: string;
+  resolved_at?: string;
+  // Joined relations
+  student?: Student;
+  teacher?: Teacher;
+  subject?: Subject;
+  responses?: ProblemResponse[];
+}
+
+export interface ProblemResponse {
+  id: string;
+  problem_id: string;
+  responder_profile_id: string;
+  message: string;
+  attachment_name?: string;
+  attachment_path?: string;
+  attachment_url?: string;
+  created_at: string;
+  responder?: Profile;
+}
+
+export type AcademicActivityLevel = 'Healthy' | 'Moderate' | 'Low';
+
+export interface AcademicActivitySummary {
+  student_id: string;
+  activity_level: AcademicActivityLevel;
+  total_assignments: number;
+  submitted_assignments: number;
+  late_submissions: number;
+  unsubmitted_assignments: number;
+  graded_assignments: number;
+  average_score_pct: number;
+  open_problems_count: number;
+  resolved_problems_count: number;
+  notes_viewed_count: number;
+}
+

@@ -48,6 +48,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
           { label: 'Parents & Guardians', to: '/admin/parents', icon: Users },
           { label: 'Classes & Sections', to: '/admin/classes', icon: Layers },
           { label: 'Subjects & Curriculum', to: '/admin/subjects', icon: BookOpen },
+          { label: 'Study Materials', to: '/admin/materials', icon: BookOpen },
+          { label: 'Academic Assignments', to: '/admin/assignments', icon: FileSpreadsheet },
           { label: 'Attendance Management', to: '/admin/attendance', icon: CalendarCheck2 },
           { label: 'Risk Detection Engine', to: '/admin/risk', icon: ShieldAlert },
           { label: 'Predictive Analytics', to: '/admin/predictions', icon: Cpu },
@@ -59,6 +61,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
       case 'teacher':
         return [
           { label: 'Teacher Dashboard', to: '/teacher', icon: LayoutDashboard },
+          { label: 'Notes & Study Material', to: '/teacher/materials', icon: BookOpen },
+          { label: 'Assignments & Grading', to: '/teacher/assignments', icon: FileSpreadsheet },
+          { label: 'Student Doubts & Q/A', to: '/teacher/doubts', icon: HelpCircle },
           { label: 'Mark Attendance', to: '/teacher/attendance', icon: CalendarCheck2 },
           { label: 'My Assigned Classes', to: '/teacher/classes', icon: Layers },
           { label: 'Attendance History', to: '/teacher/history', icon: History },
@@ -70,8 +75,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
       case 'student':
         return [
           { label: 'Student Dashboard', to: '/student', icon: LayoutDashboard },
+          { label: 'Learning & Assignments', to: '/student/learning', icon: BookOpen },
           { label: 'My Attendance Logs', to: '/student/attendance', icon: CalendarCheck2 },
-          { label: 'Subject Breakdown', to: '/student/subjects', icon: BookOpen },
+          { label: 'Subject Breakdown', to: '/student/subjects', icon: Layers },
           { label: 'Attendance History', to: '/student/history', icon: History },
           { label: 'Statistical Prediction', to: '/student/prediction', icon: Cpu },
           { label: 'Risk Diagnostics', to: '/student/risk', icon: ShieldAlert },
@@ -82,8 +88,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
       case 'parent':
         return [
           { label: 'Parent Portal', to: '/parent', icon: LayoutDashboard },
+          { label: 'Ward Learning & Work', to: '/parent/learning', icon: BookOpen },
           { label: 'Ward Profile & Stats', to: '/parent/student', icon: GraduationCap },
-          { label: 'Subject Attendance', to: '/parent/attendance', icon: BookOpen },
+          { label: 'Subject Attendance', to: '/parent/attendance', icon: Layers },
           { label: 'Risk Analysis', to: '/parent/risk', icon: ShieldAlert },
           { label: 'Attendance Forecast', to: '/parent/prediction', icon: Cpu },
           { label: 'Recommendations', to: '/parent/recommendations', icon: Lightbulb },

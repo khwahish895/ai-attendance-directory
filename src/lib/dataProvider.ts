@@ -16,6 +16,14 @@ import {
   Teacher,
   TeacherAssignment,
   UserRole,
+  LearningMaterial,
+  Assignment,
+  AssignmentSubmission,
+  SubmissionStatus,
+  StudentProblem,
+  ProblemResponse,
+  ProblemStatus,
+  AcademicActivitySummary,
 } from '../types';
 import { computeRiskAssessment } from '../services/riskService';
 import { predictStudentAttendance } from '../services/predictionService';
@@ -695,6 +703,357 @@ function generateInitialData() {
     notifications.push(...generated.notifications);
   });
 
+  const learningMaterials: LearningMaterial[] = [
+    {
+      id: 'mat-1',
+      teacher_id: 'teach-1',
+      class_id: 'cls-1',
+      subject_id: 'sub-1',
+      title: 'Unit 3: Supervised Learning & Support Vector Machines (SVM)',
+      description: 'Comprehensive lecture slides and mathematical derivations for Support Vector Classifiers, Hyperplane margins, and Kernel tricks (Polynomial & RBF).',
+      topic: 'Unit 3 - Supervised Learning & Optimization',
+      material_type: 'pdf',
+      file_name: 'CS401_Unit3_SVM_Lecture_Notes.pdf',
+      file_path: 'notes/CS401_Unit3_SVM_Lecture_Notes.pdf',
+      file_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      file_size: 3450000,
+      mime_type: 'application/pdf',
+      is_published: true,
+      view_count: 38,
+      created_at: '2026-08-10T10:00:00Z',
+      updated_at: '2026-08-10T10:00:00Z',
+    },
+    {
+      id: 'mat-2',
+      teacher_id: 'teach-1',
+      class_id: 'cls-1',
+      subject_id: 'sub-2',
+      title: 'Unit 4: Balanced Binary Search Trees & AVL Rotations',
+      description: 'Step-by-step visual animation slides covering single (LL, RR) and double (LR, RL) AVL tree rotations with asymptotic balance factor proofs.',
+      topic: 'Unit 4 - Advanced Trees & Graphs',
+      material_type: 'presentation',
+      file_name: 'CS402_AVL_Trees_and_Rotations.pptx',
+      file_path: 'notes/CS402_AVL_Trees_and_Rotations.pptx',
+      file_url: 'https://file-examples.com/storage/fe885b512c668d2f5ee6665/2017/10/file_example_PPTX_250kB.pptx',
+      file_size: 5820000,
+      mime_type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+      is_published: true,
+      view_count: 42,
+      created_at: '2026-08-11T14:30:00Z',
+      updated_at: '2026-08-11T14:30:00Z',
+    },
+    {
+      id: 'mat-3',
+      teacher_id: 'teach-1',
+      class_id: 'cls-1',
+      subject_id: 'sub-3',
+      title: 'Unit 2: CPU Scheduling & Banker\'s Algorithm for Deadlocks',
+      description: 'Detailed algorithmic breakdown and safety algorithm sample calculation tables for non-preemptive Banker\'s Resource Allocation Matrix.',
+      topic: 'Unit 2 - CPU Scheduling & Concurrency',
+      material_type: 'document',
+      file_name: 'CS403_Deadlock_Avoidance_Bankers_Algorithm.docx',
+      file_path: 'notes/CS403_Deadlock_Avoidance_Bankers_Algorithm.docx',
+      file_url: 'https://file-examples.com/storage/fe885b512c668d2f5ee6665/2017/02/file-sample_100kB.docx',
+      file_size: 1240000,
+      mime_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      is_published: true,
+      view_count: 29,
+      created_at: '2026-08-12T09:00:00Z',
+      updated_at: '2026-08-12T09:00:00Z',
+    },
+    {
+      id: 'mat-4',
+      teacher_id: 'teach-1',
+      class_id: 'cls-1',
+      subject_id: 'sub-1',
+      title: 'Interactive Neural Network Playground & Backpropagation Visualizer',
+      description: 'Official browser-based neural network sandbox for testing activation functions (ReLU, Sigmoid), learning rates, and feature interactions.',
+      topic: 'Unit 1 - Foundations of AI & ML',
+      material_type: 'link',
+      external_url: 'https://playground.tensorflow.org',
+      is_published: true,
+      view_count: 55,
+      created_at: '2026-08-13T11:00:00Z',
+      updated_at: '2026-08-13T11:00:00Z',
+    },
+    {
+      id: 'mat-5',
+      teacher_id: 'teach-2',
+      class_id: 'cls-2',
+      subject_id: 'sub-1',
+      title: 'Gradient Descent Optimization Cheat Sheet & Formulas',
+      description: 'Quick revision notes on Batch vs Mini-batch vs Stochastic Gradient Descent with convergence proofs.',
+      topic: 'Unit 2 - Optimization Algorithms',
+      material_type: 'note',
+      content_text: 'Gradient Descent update rule: θ := θ - α * ∇J(θ). For mini-batch gradient descent, calculate gradients over subsets of size B (typically 32 or 64). Remember to scale learning rate with momentum or Adam optimizer.',
+      is_published: true,
+      view_count: 19,
+      created_at: '2026-08-14T08:30:00Z',
+      updated_at: '2026-08-14T08:30:00Z',
+    },
+  ];
+
+  const assignments: Assignment[] = [
+    {
+      id: 'asg-1',
+      teacher_id: 'teach-1',
+      class_id: 'cls-1',
+      subject_id: 'sub-1',
+      title: 'Assignment 1: Gradient Descent & Linear Regression from Scratch',
+      description: 'Implement multi-variable linear regression from scratch in Python or C++ without high-level ML framework libraries (such as Scikit-Learn).',
+      instructions: '1. Write vectorized cost function computation.\n2. Implement gradient descent loop with learning rate decay.\n3. Plot loss curves across 1000 epochs.\n4. Submit source code and a 2-page PDF summary report.',
+      topic: 'Unit 2 - Linear Models & Regression',
+      attachment_name: 'Assignment1_Specification_and_Datasets.pdf',
+      attachment_path: 'assignments/Assignment1_Specification_and_Datasets.pdf',
+      attachment_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      attachment_size: 1450000,
+      start_date: '2026-08-10T00:00:00Z',
+      due_date: '2026-08-20T23:59:59Z',
+      max_marks: 100,
+      submission_type: 'both',
+      status: 'published',
+      allow_resubmission: true,
+      created_at: '2026-08-10T08:00:00Z',
+      updated_at: '2026-08-10T08:00:00Z',
+    },
+    {
+      id: 'asg-2',
+      teacher_id: 'teach-1',
+      class_id: 'cls-1',
+      subject_id: 'sub-2',
+      title: 'Assignment 2: Self-Balancing AVL Search Tree Benchmark',
+      description: 'Construct a self-balancing AVL search tree and benchmark insertion and lookup times against an unbalanced BST on 100,000 synthetic random keys.',
+      instructions: '1. Implement Left-Rotate and Right-Rotate primitives.\n2. Track balance factor at every insertion step.\n3. Package your source code and benchmarking timing logs.',
+      topic: 'Unit 4 - Trees & Balanced Structures',
+      attachment_name: 'AVL_Benchmark_Starter_Code.zip',
+      attachment_path: 'assignments/AVL_Benchmark_Starter_Code.zip',
+      attachment_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      attachment_size: 2100000,
+      start_date: '2026-08-12T00:00:00Z',
+      due_date: '2026-08-18T23:59:59Z',
+      max_marks: 50,
+      submission_type: 'file',
+      status: 'published',
+      allow_resubmission: true,
+      created_at: '2026-08-12T09:00:00Z',
+      updated_at: '2026-08-12T09:00:00Z',
+    },
+    {
+      id: 'asg-3',
+      teacher_id: 'teach-1',
+      class_id: 'cls-1',
+      subject_id: 'sub-3',
+      title: 'Assignment 3: Banker\'s Algorithm Deadlock Avoidance Simulator',
+      description: 'Build a deadlock detection and avoidance engine simulating multiple concurrent process resource allocation requests.',
+      instructions: '1. Validate safe state transitions.\n2. Output safe sequence vectors.\n3. Handle edge cases with unfulfillable requests.',
+      topic: 'Unit 3 - Concurrency & Deadlocks',
+      attachment_name: 'Bankers_Alg_Problem_Set.pdf',
+      attachment_path: 'assignments/Bankers_Alg_Problem_Set.pdf',
+      attachment_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      attachment_size: 980000,
+      start_date: '2026-08-01T00:00:00Z',
+      due_date: '2026-08-14T23:59:59Z',
+      max_marks: 100,
+      submission_type: 'file',
+      status: 'closed',
+      allow_resubmission: false,
+      created_at: '2026-08-01T08:00:00Z',
+      updated_at: '2026-08-14T23:59:59Z',
+    },
+    {
+      id: 'asg-4',
+      teacher_id: 'teach-2',
+      class_id: 'cls-2',
+      subject_id: 'sub-1',
+      title: 'Assignment 1: Exploratory Data Analysis & Outlier Imputation',
+      description: 'Perform complete exploratory data analysis (EDA), correlation heatmap generation, and outlier cleaning on real-world datasets.',
+      instructions: 'Submit your completed Jupyter Notebook (.ipynb or PDF export) along with key findings in the submission text box.',
+      topic: 'Unit 1 - Data Preparation & Cleaning',
+      start_date: '2026-08-14T00:00:00Z',
+      due_date: '2026-08-25T23:59:59Z',
+      max_marks: 50,
+      submission_type: 'both',
+      status: 'published',
+      allow_resubmission: true,
+      created_at: '2026-08-14T10:00:00Z',
+      updated_at: '2026-08-14T10:00:00Z',
+    },
+  ];
+
+  const assignmentSubmissions: AssignmentSubmission[] = [
+    {
+      id: 'subm-1',
+      assignment_id: 'asg-1',
+      student_id: 'stud-1',
+      file_name: 'Alex_Chen_Linear_Regression_Report.pdf',
+      file_path: 'student-submissions/Alex_Chen_Linear_Regression_Report.pdf',
+      file_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      file_size: 1850000,
+      mime_type: 'application/pdf',
+      text_submission: 'Implemented vectorized cost computation and batch gradient descent. The algorithm achieved minimum squared error at epoch 450 with learning rate 0.01.',
+      comments: 'Please find attached the experimental evaluation and loss graphs.',
+      submitted_at: '2026-08-16T14:30:00Z',
+      status: 'graded',
+      is_late: false,
+      marks: 96,
+      feedback: 'Outstanding implementation! Clean vectorized mathematical formulation, excellent loss curves, and clear documentation of hyperparameter effects.',
+      graded_by: 'teach-1',
+      graded_at: '2026-08-17T10:00:00Z',
+      created_at: '2026-08-16T14:30:00Z',
+      updated_at: '2026-08-17T10:00:00Z',
+    },
+    {
+      id: 'subm-2',
+      assignment_id: 'asg-1',
+      student_id: 'stud-2',
+      file_name: 'Sarah_Jenkins_Assignment1.pdf',
+      file_path: 'student-submissions/Sarah_Jenkins_Assignment1.pdf',
+      file_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      file_size: 2100000,
+      mime_type: 'application/pdf',
+      text_submission: 'Completed gradient descent with learning rate comparison experiments for values 0.1, 0.01, and 0.001.',
+      comments: 'Ready for evaluation.',
+      submitted_at: '2026-08-17T11:20:00Z',
+      status: 'submitted',
+      is_late: false,
+      created_at: '2026-08-17T11:20:00Z',
+      updated_at: '2026-08-17T11:20:00Z',
+    },
+    {
+      id: 'subm-3',
+      assignment_id: 'asg-1',
+      student_id: 'stud-3',
+      file_name: 'Michael_Brown_A1_Final.pdf',
+      file_path: 'student-submissions/Michael_Brown_A1_Final.pdf',
+      file_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      file_size: 1400000,
+      mime_type: 'application/pdf',
+      text_submission: 'Regression pipeline with gradient clipping.',
+      comments: 'Submitted after testing on local machine.',
+      submitted_at: '2026-08-21T02:15:00Z',
+      status: 'late',
+      is_late: true,
+      created_at: '2026-08-21T02:15:00Z',
+      updated_at: '2026-08-21T02:15:00Z',
+    },
+    {
+      id: 'subm-4',
+      assignment_id: 'asg-2',
+      student_id: 'stud-1',
+      file_name: 'Alex_Chen_AVL_Tree_Benchmark.zip',
+      file_path: 'student-submissions/Alex_Chen_AVL_Tree_Benchmark.zip',
+      file_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      file_size: 3200000,
+      mime_type: 'application/zip',
+      text_submission: 'Source code in C++ with chrono microsecond timing log reports. AVL lookup remained bounded within O(log N) operations even with sorted inputs.',
+      submitted_at: '2026-08-15T18:00:00Z',
+      status: 'submitted',
+      is_late: false,
+      created_at: '2026-08-15T18:00:00Z',
+      updated_at: '2026-08-15T18:00:00Z',
+    },
+    {
+      id: 'subm-5',
+      assignment_id: 'asg-3',
+      student_id: 'stud-1',
+      file_name: 'Alex_Chen_Bankers_Trace.pdf',
+      file_path: 'student-submissions/Alex_Chen_Bankers_Trace.pdf',
+      file_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      file_size: 1200000,
+      mime_type: 'application/pdf',
+      text_submission: 'Safety algorithm matrix simulation trace verifying process allocation sequence <P1, P3, P4, P0, P2>.',
+      submitted_at: '2026-08-13T16:00:00Z',
+      status: 'graded',
+      is_late: false,
+      marks: 98,
+      feedback: 'Very thorough verification matrix. Step-by-step trace demonstrates complete mastery of resource allocation state safety.',
+      graded_by: 'teach-1',
+      graded_at: '2026-08-14T11:00:00Z',
+      created_at: '2026-08-13T16:00:00Z',
+      updated_at: '2026-08-14T11:00:00Z',
+    },
+  ];
+
+  const studentProblems: StudentProblem[] = [
+    {
+      id: 'prob-1',
+      student_id: 'stud-1',
+      teacher_id: 'teach-1',
+      subject_id: 'sub-1',
+      title: 'Clarification on Kernel Trick in Non-linear Support Vector Machines',
+      description: 'Could you clarify how the RBF Gaussian kernel projects infinite-dimensional features without explicit coordinate calculation? Is Mercer\'s Theorem strictly required for polynomial kernels as well?',
+      category: 'concept_doubt',
+      priority: 'medium',
+      topic: 'Unit 3 - Support Vector Machines & Kernels',
+      attachment_name: 'Kernel_Doubt_Formulation.pdf',
+      attachment_path: 'student-submissions/Kernel_Doubt_Formulation.pdf',
+      attachment_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      status: 'in_progress',
+      created_at: '2026-08-13T14:00:00Z',
+      updated_at: '2026-08-14T09:30:00Z',
+    },
+    {
+      id: 'prob-2',
+      student_id: 'stud-3',
+      teacher_id: 'teach-1',
+      subject_id: 'sub-2',
+      title: 'Runtime recursion depth limit exceeded in AVL Tree rebalance rotation',
+      description: 'When inserting sorted sequential keys into my AVL implementation, I am hitting a maximum recursion depth error during Left-Right (LR) double rotations. Could you review my rotation logic?',
+      category: 'assignment_problem',
+      priority: 'high',
+      topic: 'Unit 4 - AVL Trees',
+      status: 'open',
+      created_at: '2026-08-14T16:20:00Z',
+      updated_at: '2026-08-14T16:20:00Z',
+    },
+    {
+      id: 'prob-3',
+      student_id: 'stud-2',
+      teacher_id: 'teach-1',
+      subject_id: 'sub-3',
+      title: 'Safe state determination with multiple concurrent resource instances',
+      description: 'Under what conditions does Banker\'s algorithm fail to detect livelock between two non-preemptive threads?',
+      category: 'concept_doubt',
+      priority: 'low',
+      topic: 'Unit 3 - Deadlocks & Concurrency',
+      status: 'resolved',
+      created_at: '2026-08-10T11:00:00Z',
+      updated_at: '2026-08-11T15:00:00Z',
+      resolved_at: '2026-08-11T15:00:00Z',
+    },
+  ];
+
+  const problemResponses: ProblemResponse[] = [
+    {
+      id: 'resp-1',
+      problem_id: 'prob-1',
+      responder_profile_id: 'usr-student-1',
+      message: 'Prof. Turing, I went through the Unit 3 lecture slides on slide 14, but I want to verify if computing K(x_i, x_j) guarantees convex optimization in the dual Lagrangian formulation.',
+      created_at: '2026-08-13T14:00:00Z',
+    },
+    {
+      id: 'resp-2',
+      problem_id: 'prob-1',
+      responder_profile_id: 'usr-teacher-1',
+      message: 'Great observation, Alex! Mercer\'s Condition ensures that any continuous symmetric kernel function corresponds to an inner product in a Reproducing Kernel Hilbert Space (RKHS). Because the dual formulation only ever depends on the dot products between sample pairs, we never have to calculate the high-dimensional coordinates directly. I have added supplementary notes in Unit 3 for you to review!',
+      created_at: '2026-08-14T09:30:00Z',
+    },
+    {
+      id: 'resp-3',
+      problem_id: 'prob-3',
+      responder_profile_id: 'usr-student-2',
+      message: 'Could you explain why Banker\'s algorithm is considered conservative in active operating system design?',
+      created_at: '2026-08-10T11:00:00Z',
+    },
+    {
+      id: 'resp-4',
+      problem_id: 'prob-3',
+      responder_profile_id: 'usr-teacher-1',
+      message: 'Banker\'s Algorithm assumes worst-case maximum resource requests by every thread before releasing resources. Thus, it avoids all unsafe states even if in practice deadlock might not have materialized. This answers your doubt, marking as resolved.',
+      created_at: '2026-08-11T15:00:00Z',
+    },
+  ];
+
   const auditLogs: AuditLog[] = [
     {
       id: 'log-1',
@@ -748,6 +1107,11 @@ function generateInitialData() {
     alerts,
     notifications,
     auditLogs,
+    learningMaterials,
+    assignments,
+    assignmentSubmissions,
+    studentProblems,
+    problemResponses,
   };
 }
 
@@ -762,15 +1126,24 @@ class DataStore {
   }
 
   private loadFromStorage(): DatabaseSchema {
+    const initial = generateInitialData();
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        return JSON.parse(stored);
+        const parsed = JSON.parse(stored);
+        return {
+          ...initial,
+          ...parsed,
+          learningMaterials: parsed.learningMaterials && parsed.learningMaterials.length > 0 ? parsed.learningMaterials : initial.learningMaterials,
+          assignments: parsed.assignments && parsed.assignments.length > 0 ? parsed.assignments : initial.assignments,
+          assignmentSubmissions: parsed.assignmentSubmissions && parsed.assignmentSubmissions.length > 0 ? parsed.assignmentSubmissions : initial.assignmentSubmissions,
+          studentProblems: parsed.studentProblems && parsed.studentProblems.length > 0 ? parsed.studentProblems : initial.studentProblems,
+          problemResponses: parsed.problemResponses && parsed.problemResponses.length > 0 ? parsed.problemResponses : initial.problemResponses,
+        };
       }
     } catch (e) {
       console.warn('Failed to parse stored database state, initializing fresh data.', e);
     }
-    const initial = generateInitialData();
     this.saveToStorage(initial);
     return initial;
   }
@@ -835,11 +1208,42 @@ class DataStore {
     };
   }
 
+  public getStudentByProfileId(profileId: string): Student | undefined {
+    const s = this.data.students.find(st => st.profile_id === profileId || st.id === profileId);
+    if (!s) return undefined;
+    return {
+      ...s,
+      profile: this.data.profiles.find(p => p.id === s.profile_id),
+      class: this.data.classes.find(c => c.id === s.class_id),
+      parent: this.data.parents.find(p => p.id === s.parent_id),
+    };
+  }
+
+  public getStudentsByClass(classId: string): Student[] {
+    return this.data.students
+      .filter(s => s.class_id === classId)
+      .map(s => ({
+        ...s,
+        profile: this.data.profiles.find(p => p.id === s.profile_id),
+        class: this.data.classes.find(c => c.id === s.class_id),
+        parent: this.data.parents.find(p => p.id === s.parent_id),
+      }));
+  }
+
   public getTeachers(): Teacher[] {
     return this.data.teachers.map(t => ({
       ...t,
       profile: this.data.profiles.find(p => p.id === t.profile_id),
     }));
+  }
+
+  public getTeacherById(id: string): Teacher | undefined {
+    const t = this.data.teachers.find(tch => tch.id === id || tch.profile_id === id);
+    if (!t) return undefined;
+    return {
+      ...t,
+      profile: this.data.profiles.find(p => p.id === t.profile_id),
+    };
   }
 
   public getTeacherByProfileId(profileId: string): Teacher | undefined {
@@ -863,6 +1267,22 @@ class DataStore {
           class: this.data.classes.find(c => c.id === s.class_id),
         })),
     }));
+  }
+
+  public getParentById(id: string): Parent | undefined {
+    const p = this.data.parents.find(pr => pr.id === id || pr.profile_id === id);
+    if (!p) return undefined;
+    return {
+      ...p,
+      profile: this.data.profiles.find(pr => pr.id === p.profile_id),
+      students: this.data.students
+        .filter(s => s.parent_id === p.id)
+        .map(s => ({
+          ...s,
+          profile: this.data.profiles.find(pr => pr.id === s.profile_id),
+          class: this.data.classes.find(c => c.id === s.class_id),
+        })),
+    };
   }
 
   public getParentByProfileId(profileId: string): Parent | undefined {
@@ -895,8 +1315,52 @@ class DataStore {
     });
   }
 
+  public getClassById(id: string): Class | undefined {
+    const c = this.data.classes.find(cls => cls.id === id);
+    if (!c) return undefined;
+    const teacher = this.data.teachers.find(t => t.id === c.class_teacher_id);
+    return {
+      ...c,
+      student_count: this.data.students.filter(s => s.class_id === c.id).length,
+      class_teacher: teacher ? {
+        ...teacher,
+        profile: this.data.profiles.find(p => p.id === teacher.profile_id),
+      } : undefined,
+    };
+  }
+
   public getSubjects(): Subject[] {
     return [...this.data.subjects];
+  }
+
+  public getSubjectById(id: string): Subject | undefined {
+    return this.data.subjects.find(s => s.id === id);
+  }
+
+  public incrementMaterialView(materialId: string): void {
+    const m = this.data.learningMaterials?.find(item => item.id === materialId);
+    if (m) {
+      m.view_count = (m.view_count || 0) + 1;
+      this.notify();
+    }
+  }
+
+  public getStudentSubmissions(studentId: string): AssignmentSubmission[] {
+    const list = (this.data.assignmentSubmissions || []).filter(s => s.student_id === studentId);
+    return list.map(s => ({
+      ...s,
+      student: this.getStudentById(s.student_id),
+      assignment: this.getAssignmentById(s.assignment_id),
+    }));
+  }
+
+  public getSubmissionsForAssignment(assignmentId: string): AssignmentSubmission[] {
+    const list = (this.data.assignmentSubmissions || []).filter(s => s.assignment_id === assignmentId);
+    return list.map(s => ({
+      ...s,
+      student: this.getStudentById(s.student_id),
+      assignment: this.getAssignmentById(s.assignment_id),
+    }));
   }
 
   public getTeacherAssignments(teacherId?: string): TeacherAssignment[] {
@@ -1624,6 +2088,989 @@ class DataStore {
       created_at: new Date().toISOString(),
     });
   }
+
+  // --------------------------------------------------------------------------
+  // LEARNING MATERIALS METHODS
+  // --------------------------------------------------------------------------
+
+  public getLearningMaterials(filters?: {
+    classId?: string;
+    subjectId?: string;
+    teacherId?: string;
+    studentId?: string;
+    publishedOnly?: boolean;
+    search?: string;
+    topic?: string;
+  }): LearningMaterial[] {
+    let list = [...(this.data.learningMaterials || [])];
+
+    if (filters?.classId) {
+      list = list.filter(m => m.class_id === filters.classId);
+    }
+    if (filters?.subjectId) {
+      list = list.filter(m => m.subject_id === filters.subjectId);
+    }
+    if (filters?.teacherId) {
+      list = list.filter(m => m.teacher_id === filters.teacherId);
+    }
+    if (filters?.publishedOnly) {
+      list = list.filter(m => m.is_published);
+    }
+    if (filters?.topic) {
+      list = list.filter(m => m.topic.toLowerCase().includes(filters.topic!.toLowerCase()));
+    }
+    if (filters?.search) {
+      const q = filters.search.toLowerCase();
+      list = list.filter(
+        m =>
+          m.title.toLowerCase().includes(q) ||
+          m.description.toLowerCase().includes(q) ||
+          m.topic.toLowerCase().includes(q) ||
+          m.file_name?.toLowerCase().includes(q)
+      );
+    }
+
+    // Attach joined entities
+    return list
+      .map(m => ({
+        ...m,
+        teacher: this.getTeacherById(m.teacher_id),
+        subject: this.getSubjectById(m.subject_id),
+        class: this.getClassById(m.class_id),
+      }))
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  }
+
+  public getLearningMaterialById(id: string): LearningMaterial | undefined {
+    const m = this.data.learningMaterials?.find(item => item.id === id);
+    if (!m) return undefined;
+    return {
+      ...m,
+      teacher: this.getTeacherById(m.teacher_id),
+      subject: this.getSubjectById(m.subject_id),
+      class: this.getClassById(m.class_id),
+    };
+  }
+
+  public createLearningMaterial(
+    data: Omit<LearningMaterial, 'id' | 'created_at' | 'updated_at'>,
+    actor?: { id: string; name: string; role: UserRole }
+  ): LearningMaterial {
+    const id = `mat-${Date.now()}`;
+    const now = new Date().toISOString();
+    const newMaterial: LearningMaterial = {
+      ...data,
+      id,
+      view_count: 0,
+      created_at: now,
+      updated_at: now,
+    };
+
+    if (!this.data.learningMaterials) this.data.learningMaterials = [];
+    this.data.learningMaterials.unshift(newMaterial);
+
+    if (actor) {
+      this.logAuditAction(
+        actor.id,
+        actor.name,
+        actor.role,
+        'Created Learning Material',
+        'LearningMaterial',
+        id,
+        `Uploaded material "${newMaterial.title}" (${newMaterial.material_type}).`
+      );
+    }
+
+    // Generate notifications for enrolled students if published
+    if (newMaterial.is_published) {
+      const enrolledStudents = this.getStudentsByClass(newMaterial.class_id);
+      const subject = this.getSubjectById(newMaterial.subject_id);
+      enrolledStudents.forEach(st => {
+        this.data.notifications.unshift({
+          id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+          recipient_profile_id: st.profile_id,
+          title: `New Study Material: ${subject?.name || 'Class'}`,
+          message: `New note "${newMaterial.title}" was published for ${newMaterial.topic}.`,
+          type: 'recommendation',
+          is_read: false,
+          created_at: now,
+          link: `/student/materials`,
+        });
+      });
+    }
+
+    this.notify();
+    return this.getLearningMaterialById(id)!;
+  }
+
+  public updateLearningMaterial(
+    id: string,
+    updates: Partial<LearningMaterial>,
+    actor?: { id: string; name: string; role: UserRole }
+  ): LearningMaterial | undefined {
+    const index = this.data.learningMaterials?.findIndex(m => m.id === id);
+    if (index === undefined || index === -1) return undefined;
+
+    const existing = this.data.learningMaterials[index];
+    const updated: LearningMaterial = {
+      ...existing,
+      ...updates,
+      updated_at: new Date().toISOString(),
+    };
+
+    this.data.learningMaterials[index] = updated;
+
+    if (actor) {
+      this.logAuditAction(
+        actor.id,
+        actor.name,
+        actor.role,
+        'Updated Learning Material',
+        'LearningMaterial',
+        id,
+        `Modified material "${updated.title}".`
+      );
+    }
+
+    this.notify();
+    return this.getLearningMaterialById(id);
+  }
+
+  public deleteLearningMaterial(id: string, actor?: { id: string; name: string; role: UserRole }): boolean {
+    if (!this.data.learningMaterials) return false;
+    const index = this.data.learningMaterials.findIndex(m => m.id === id);
+    if (index === -1) return false;
+
+    const deleted = this.data.learningMaterials[index];
+    this.data.learningMaterials.splice(index, 1);
+
+    if (actor) {
+      this.logAuditAction(
+        actor.id,
+        actor.name,
+        actor.role,
+        'Deleted Learning Material',
+        'LearningMaterial',
+        id,
+        `Deleted material "${deleted.title}".`
+      );
+    }
+
+    this.notify();
+    return true;
+  }
+
+  public recordMaterialView(materialId: string, studentId?: string): void {
+    const mat = this.data.learningMaterials?.find(m => m.id === materialId);
+    if (mat) {
+      mat.view_count = (mat.view_count || 0) + 1;
+      this.notify();
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // ASSIGNMENT MANAGEMENT METHODS
+  // --------------------------------------------------------------------------
+
+  public getAssignments(filters?: {
+    classId?: string;
+    subjectId?: string;
+    teacherId?: string;
+    studentId?: string;
+    status?: string;
+    search?: string;
+  }): Assignment[] {
+    let list = [...(this.data.assignments || [])];
+
+    if (filters?.classId) {
+      list = list.filter(a => a.class_id === filters.classId);
+    }
+    if (filters?.subjectId) {
+      list = list.filter(a => a.subject_id === filters.subjectId);
+    }
+    if (filters?.teacherId) {
+      list = list.filter(a => a.teacher_id === filters.teacherId);
+    }
+    if (filters?.status && filters.status !== 'all') {
+      list = list.filter(a => a.status === filters.status);
+    }
+    if (filters?.search) {
+      const q = filters.search.toLowerCase();
+      list = list.filter(
+        a =>
+          a.title.toLowerCase().includes(q) ||
+          a.description.toLowerCase().includes(q) ||
+          (a.topic && a.topic.toLowerCase().includes(q))
+      );
+    }
+
+    return list
+      .map(a => {
+        const subs = (this.data.assignmentSubmissions || []).filter(s => s.assignment_id === a.id);
+        const graded = subs.filter(s => s.status === 'graded');
+        return {
+          ...a,
+          teacher: this.getTeacherById(a.teacher_id),
+          subject: this.getSubjectById(a.subject_id),
+          class: this.getClassById(a.class_id),
+          submission_count: subs.length,
+          graded_count: graded.length,
+        };
+      })
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  }
+
+  public getAssignmentById(id: string): Assignment | undefined {
+    const a = this.data.assignments?.find(item => item.id === id);
+    if (!a) return undefined;
+    const subs = (this.data.assignmentSubmissions || []).filter(s => s.assignment_id === a.id);
+    const graded = subs.filter(s => s.status === 'graded');
+    return {
+      ...a,
+      teacher: this.getTeacherById(a.teacher_id),
+      subject: this.getSubjectById(a.subject_id),
+      class: this.getClassById(a.class_id),
+      submission_count: subs.length,
+      graded_count: graded.length,
+    };
+  }
+
+  public createAssignment(
+    data: Omit<Assignment, 'id' | 'created_at' | 'updated_at'>,
+    actor?: { id: string; name: string; role: UserRole }
+  ): Assignment {
+    const id = `asg-${Date.now()}`;
+    const now = new Date().toISOString();
+    const newAssignment: Assignment = {
+      ...data,
+      id,
+      created_at: now,
+      updated_at: now,
+    };
+
+    if (!this.data.assignments) this.data.assignments = [];
+    this.data.assignments.unshift(newAssignment);
+
+    if (actor) {
+      this.logAuditAction(
+        actor.id,
+        actor.name,
+        actor.role,
+        'Created Assignment',
+        'Assignment',
+        id,
+        `Created assignment "${newAssignment.title}" with max marks ${newAssignment.max_marks}.`
+      );
+    }
+
+    // Auto-notify enrolled students and parents if published
+    if (newAssignment.status === 'published') {
+      const enrolledStudents = this.getStudentsByClass(newAssignment.class_id);
+      const subject = this.getSubjectById(newAssignment.subject_id);
+      const formattedDueDate = new Date(newAssignment.due_date).toLocaleDateString();
+
+      enrolledStudents.forEach(st => {
+        // Notify Student
+        this.data.notifications.unshift({
+          id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+          recipient_profile_id: st.profile_id,
+          title: `New Assignment: ${subject?.name || 'Class'}`,
+          message: `"${newAssignment.title}" is due on ${formattedDueDate}. Max marks: ${newAssignment.max_marks}.`,
+          type: 'warning',
+          is_read: false,
+          created_at: now,
+          link: `/student/assignments`,
+        });
+
+        // Notify Parent if linked
+        if (st.parent_id) {
+          const parent = this.getParentById(st.parent_id);
+          if (parent) {
+            this.data.notifications.unshift({
+              id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+              recipient_profile_id: parent.profile_id,
+              title: `New Homework Assigned for Ward`,
+              message: `Your ward has a new assignment "${newAssignment.title}" for ${subject?.name || 'Subject'} due ${formattedDueDate}.`,
+              type: 'system',
+              is_read: false,
+              created_at: now,
+              link: `/parent/assignments`,
+            });
+          }
+        }
+      });
+    }
+
+    this.notify();
+    return this.getAssignmentById(id)!;
+  }
+
+  public updateAssignment(
+    id: string,
+    updates: Partial<Assignment>,
+    actor?: { id: string; name: string; role: UserRole }
+  ): Assignment | undefined {
+    const index = this.data.assignments?.findIndex(a => a.id === id);
+    if (index === undefined || index === -1) return undefined;
+
+    const existing = this.data.assignments[index];
+    const updated: Assignment = {
+      ...existing,
+      ...updates,
+      updated_at: new Date().toISOString(),
+    };
+
+    this.data.assignments[index] = updated;
+
+    if (actor) {
+      this.logAuditAction(
+        actor.id,
+        actor.name,
+        actor.role,
+        'Updated Assignment',
+        'Assignment',
+        id,
+        `Updated assignment "${updated.title}".`
+      );
+    }
+
+    this.notify();
+    return this.getAssignmentById(id);
+  }
+
+  public deleteAssignment(id: string, actor?: { id: string; name: string; role: UserRole }): boolean {
+    if (!this.data.assignments) return false;
+    const index = this.data.assignments.findIndex(a => a.id === id);
+    if (index === -1) return false;
+
+    const deleted = this.data.assignments[index];
+    this.data.assignments.splice(index, 1);
+
+    // Also remove associated submissions
+    if (this.data.assignmentSubmissions) {
+      this.data.assignmentSubmissions = this.data.assignmentSubmissions.filter(s => s.assignment_id !== id);
+    }
+
+    if (actor) {
+      this.logAuditAction(
+        actor.id,
+        actor.name,
+        actor.role,
+        'Deleted Assignment',
+        'Assignment',
+        id,
+        `Deleted assignment "${deleted.title}".`
+      );
+    }
+
+    this.notify();
+    return true;
+  }
+
+  // --------------------------------------------------------------------------
+  // SUBMISSION & GRADING METHODS
+  // --------------------------------------------------------------------------
+
+  public getSubmissions(filters?: {
+    assignmentId?: string;
+    studentId?: string;
+    classId?: string;
+    status?: string;
+    isLate?: boolean;
+    search?: string;
+  }): AssignmentSubmission[] {
+    let list = [...(this.data.assignmentSubmissions || [])];
+
+    if (filters?.assignmentId) {
+      list = list.filter(s => s.assignment_id === filters.assignmentId);
+    }
+    if (filters?.studentId) {
+      list = list.filter(s => s.student_id === filters.studentId);
+    }
+    if (filters?.status && filters.status !== 'all') {
+      list = list.filter(s => s.status === filters.status);
+    }
+    if (filters?.isLate !== undefined) {
+      list = list.filter(s => s.is_late === filters.isLate);
+    }
+
+    return list
+      .map(s => ({
+        ...s,
+        student: this.getStudentById(s.student_id),
+        assignment: this.getAssignmentById(s.assignment_id),
+        grader: s.graded_by ? this.getTeacherById(s.graded_by) : undefined,
+      }))
+      .filter(s => {
+        if (filters?.classId && s.assignment?.class_id !== filters.classId) return false;
+        if (filters?.search) {
+          const q = filters.search.toLowerCase();
+          const studentName = s.student?.profile?.full_name?.toLowerCase() || '';
+          const roll = s.student?.roll_number?.toLowerCase() || '';
+          const title = s.assignment?.title?.toLowerCase() || '';
+          return studentName.includes(q) || roll.includes(q) || title.includes(q);
+        }
+        return true;
+      })
+      .sort((a, b) => new Date(b.submitted_at).getTime() - new Date(a.submitted_at).getTime());
+  }
+
+  public getSubmissionById(id: string): AssignmentSubmission | undefined {
+    const s = this.data.assignmentSubmissions?.find(item => item.id === id);
+    if (!s) return undefined;
+    return {
+      ...s,
+      student: this.getStudentById(s.student_id),
+      assignment: this.getAssignmentById(s.assignment_id),
+      grader: s.graded_by ? this.getTeacherById(s.graded_by) : undefined,
+    };
+  }
+
+  public getSubmissionForStudentAndAssignment(
+    studentId: string,
+    assignmentId: string
+  ): AssignmentSubmission | undefined {
+    const s = this.data.assignmentSubmissions?.find(
+      item => item.student_id === studentId && item.assignment_id === assignmentId
+    );
+    if (!s) return undefined;
+    return this.getSubmissionById(s.id);
+  }
+
+  public submitAssignment(
+    data: {
+      assignmentId: string;
+      studentId: string;
+      filePath?: string;
+      fileUrl?: string;
+      fileName?: string;
+      fileSize?: number;
+      mimeType?: string;
+      textSubmission?: string;
+      comments?: string;
+    },
+    actor?: { id: string; name: string; role: UserRole }
+  ): AssignmentSubmission {
+    const assignment = this.getAssignmentById(data.assignmentId);
+    if (!assignment) throw new Error('Assignment not found');
+
+    const now = new Date();
+    const nowIso = now.toISOString();
+    const isLate = now > new Date(assignment.due_date);
+    const status: SubmissionStatus = isLate ? 'late' : 'submitted';
+
+    // Check if existing submission to update/resubmit
+    const existingIndex = this.data.assignmentSubmissions?.findIndex(
+      s => s.assignment_id === data.assignmentId && s.student_id === data.studentId
+    );
+
+    let submission: AssignmentSubmission;
+
+    if (existingIndex !== undefined && existingIndex !== -1) {
+      const existing = this.data.assignmentSubmissions[existingIndex];
+      submission = {
+        ...existing,
+        file_path: data.filePath || existing.file_path,
+        file_url: data.fileUrl || existing.file_url,
+        file_name: data.fileName || existing.file_name,
+        file_size: data.fileSize !== undefined ? data.fileSize : existing.file_size,
+        mime_type: data.mimeType || existing.mime_type,
+        text_submission: data.textSubmission !== undefined ? data.textSubmission : existing.text_submission,
+        comments: data.comments !== undefined ? data.comments : existing.comments,
+        submitted_at: nowIso,
+        status,
+        is_late: isLate,
+        updated_at: nowIso,
+      };
+      this.data.assignmentSubmissions[existingIndex] = submission;
+    } else {
+      submission = {
+        id: `subm-${Date.now()}`,
+        assignment_id: data.assignmentId,
+        student_id: data.studentId,
+        file_path: data.filePath,
+        file_url: data.fileUrl,
+        file_name: data.fileName,
+        file_size: data.fileSize,
+        mime_type: data.mimeType,
+        text_submission: data.textSubmission,
+        comments: data.comments,
+        submitted_at: nowIso,
+        status,
+        is_late: isLate,
+        created_at: nowIso,
+        updated_at: nowIso,
+      };
+      if (!this.data.assignmentSubmissions) this.data.assignmentSubmissions = [];
+      this.data.assignmentSubmissions.unshift(submission);
+    }
+
+    if (actor) {
+      this.logAuditAction(
+        actor.id,
+        actor.name,
+        actor.role,
+        'Submitted Assignment Work',
+        'AssignmentSubmission',
+        submission.id,
+        `Student submitted work for "${assignment.title}" (${isLate ? 'LATE' : 'ON-TIME'}).`
+      );
+    }
+
+    // Notify Teacher about student submission
+    const teacher = this.getTeacherById(assignment.teacher_id);
+    const student = this.getStudentById(data.studentId);
+    if (teacher) {
+      this.data.notifications.unshift({
+        id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+        recipient_profile_id: teacher.profile_id,
+        title: `Work Submitted: ${assignment.title}`,
+        message: `${student?.profile?.full_name || 'Student'} (${student?.roll_number}) submitted work${isLate ? ' (LATE)' : ''}.`,
+        type: 'attendance_alert',
+        is_read: false,
+        created_at: nowIso,
+        link: `/teacher/assignments/${assignment.id}/submissions`,
+      });
+    }
+
+    this.notify();
+    return this.getSubmissionById(submission.id)!;
+  }
+
+  public gradeSubmission(
+    submissionId: string,
+    gradeData: {
+      marks: number;
+      feedback: string;
+      gradedByTeacherId: string;
+    },
+    actor?: { id: string; name: string; role: UserRole }
+  ): AssignmentSubmission {
+    const index = this.data.assignmentSubmissions?.findIndex(s => s.id === submissionId);
+    if (index === undefined || index === -1) throw new Error('Submission not found');
+
+    const now = new Date().toISOString();
+    const existing = this.data.assignmentSubmissions[index];
+    const assignment = this.getAssignmentById(existing.assignment_id);
+
+    const updated: AssignmentSubmission = {
+      ...existing,
+      marks: gradeData.marks,
+      feedback: gradeData.feedback,
+      graded_by: gradeData.gradedByTeacherId,
+      graded_at: now,
+      status: 'graded',
+      updated_at: now,
+    };
+
+    this.data.assignmentSubmissions[index] = updated;
+
+    if (actor) {
+      this.logAuditAction(
+        actor.id,
+        actor.name,
+        actor.role,
+        'Graded Student Submission',
+        'AssignmentSubmission',
+        submissionId,
+        `Awarded ${gradeData.marks}/${assignment?.max_marks || 100} for "${assignment?.title}".`
+      );
+    }
+
+    // Notify Student & Parent about graded work
+    const student = this.getStudentById(existing.student_id);
+    if (student) {
+      this.data.notifications.unshift({
+        id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+        recipient_profile_id: student.profile_id,
+        title: `Assignment Graded: ${assignment?.title}`,
+        message: `Your score: ${gradeData.marks}/${assignment?.max_marks || 100}. Feedback: "${gradeData.feedback.slice(0, 80)}..."`,
+        type: 'recommendation',
+        is_read: false,
+        created_at: now,
+        link: `/student/assignments`,
+      });
+
+      if (student.parent_id) {
+        const parent = this.getParentById(student.parent_id);
+        if (parent) {
+          this.data.notifications.unshift({
+            id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+            recipient_profile_id: parent.profile_id,
+            title: `Assignment Evaluated for Ward`,
+            message: `Score for ${assignment?.title}: ${gradeData.marks}/${assignment?.max_marks || 100}.`,
+            type: 'system',
+            is_read: false,
+            created_at: now,
+            link: `/parent/assignments`,
+          });
+        }
+      }
+    }
+
+    this.notify();
+    return this.getSubmissionById(submissionId)!;
+  }
+
+  public returnSubmission(
+    submissionId: string,
+    feedback: string,
+    actor?: { id: string; name: string; role: UserRole }
+  ): AssignmentSubmission {
+    const index = this.data.assignmentSubmissions?.findIndex(s => s.id === submissionId);
+    if (index === undefined || index === -1) throw new Error('Submission not found');
+
+    const now = new Date().toISOString();
+    const existing = this.data.assignmentSubmissions[index];
+    const assignment = this.getAssignmentById(existing.assignment_id);
+
+    const updated: AssignmentSubmission = {
+      ...existing,
+      feedback,
+      status: 'returned',
+      returned_at: now,
+      updated_at: now,
+    };
+
+    this.data.assignmentSubmissions[index] = updated;
+
+    if (actor) {
+      this.logAuditAction(
+        actor.id,
+        actor.name,
+        actor.role,
+        'Returned Submission for Revision',
+        'AssignmentSubmission',
+        submissionId,
+        `Returned work for "${assignment?.title}" with request for revision.`
+      );
+    }
+
+    const student = this.getStudentById(existing.student_id);
+    if (student) {
+      this.data.notifications.unshift({
+        id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+        recipient_profile_id: student.profile_id,
+        title: `Assignment Returned for Revision: ${assignment?.title}`,
+        message: `Teacher comments: "${feedback}". Please update and resubmit.`,
+        type: 'warning',
+        is_read: false,
+        created_at: now,
+        link: `/student/assignments`,
+      });
+    }
+
+    this.notify();
+    return this.getSubmissionById(submissionId)!;
+  }
+
+  // --------------------------------------------------------------------------
+  // STUDENT DOUBTS & PROBLEMS
+  // --------------------------------------------------------------------------
+
+  public getStudentProblems(filters?: {
+    studentId?: string;
+    teacherId?: string;
+    subjectId?: string;
+    status?: string;
+    priority?: string;
+    search?: string;
+  }): StudentProblem[] {
+    let list = [...(this.data.studentProblems || [])];
+
+    if (filters?.studentId) {
+      list = list.filter(p => p.student_id === filters.studentId);
+    }
+    if (filters?.teacherId) {
+      list = list.filter(p => p.teacher_id === filters.teacherId);
+    }
+    if (filters?.subjectId) {
+      list = list.filter(p => p.subject_id === filters.subjectId);
+    }
+    if (filters?.status && filters.status !== 'all') {
+      list = list.filter(p => p.status === filters.status);
+    }
+    if (filters?.priority && filters.priority !== 'all') {
+      list = list.filter(p => p.priority === filters.priority);
+    }
+    if (filters?.search) {
+      const q = filters.search.toLowerCase();
+      list = list.filter(
+        p =>
+          p.title.toLowerCase().includes(q) ||
+          p.description.toLowerCase().includes(q) ||
+          (p.topic && p.topic.toLowerCase().includes(q))
+      );
+    }
+
+    return list
+      .map(p => {
+        const responses = (this.data.problemResponses || [])
+          .filter(r => r.problem_id === p.id)
+          .map(r => ({
+            ...r,
+            responder: this.getProfileById(r.responder_profile_id),
+          }))
+          .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+
+        return {
+          ...p,
+          student: this.getStudentById(p.student_id),
+          teacher: this.getTeacherById(p.teacher_id),
+          subject: this.getSubjectById(p.subject_id),
+          responses,
+        };
+      })
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  }
+
+  public getProblemById(id: string): StudentProblem | undefined {
+    const p = this.data.studentProblems?.find(item => item.id === id);
+    if (!p) return undefined;
+    const responses = (this.data.problemResponses || [])
+      .filter(r => r.problem_id === p.id)
+      .map(r => ({
+        ...r,
+        responder: this.getProfileById(r.responder_profile_id),
+      }))
+      .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+
+    return {
+      ...p,
+      student: this.getStudentById(p.student_id),
+      teacher: this.getTeacherById(p.teacher_id),
+      subject: this.getSubjectById(p.subject_id),
+      responses,
+    };
+  }
+
+  public createStudentProblem(
+    data: Omit<StudentProblem, 'id' | 'created_at' | 'updated_at'>,
+    actor?: { id: string; name: string; role: UserRole }
+  ): StudentProblem {
+    const id = `prob-${Date.now()}`;
+    const now = new Date().toISOString();
+    const newProblem: StudentProblem = {
+      ...data,
+      id,
+      created_at: now,
+      updated_at: now,
+    };
+
+    if (!this.data.studentProblems) this.data.studentProblems = [];
+    this.data.studentProblems.unshift(newProblem);
+
+    if (actor) {
+      this.logAuditAction(
+        actor.id,
+        actor.name,
+        actor.role,
+        'Submitted Doubt/Problem',
+        'StudentProblem',
+        id,
+        `Raised doubt "${newProblem.title}" for subject.`
+      );
+    }
+
+    // Notify Teacher
+    const teacher = this.getTeacherById(newProblem.teacher_id);
+    const student = this.getStudentById(newProblem.student_id);
+    if (teacher) {
+      this.data.notifications.unshift({
+        id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+        recipient_profile_id: teacher.profile_id,
+        title: `New Student Doubt (${newProblem.priority.toUpperCase()})`,
+        message: `${student?.profile?.full_name || 'Student'}: "${newProblem.title}"`,
+        type: 'warning',
+        is_read: false,
+        created_at: now,
+        link: `/teacher/problems`,
+      });
+    }
+
+    this.notify();
+    return this.getProblemById(id)!;
+  }
+
+  public updateProblemStatus(
+    problemId: string,
+    status: ProblemStatus,
+    actor?: { id: string; name: string; role: UserRole }
+  ): StudentProblem | undefined {
+    const index = this.data.studentProblems?.findIndex(p => p.id === problemId);
+    if (index === undefined || index === -1) return undefined;
+
+    const now = new Date().toISOString();
+    const existing = this.data.studentProblems[index];
+    const updated: StudentProblem = {
+      ...existing,
+      status,
+      updated_at: now,
+      resolved_at: status === 'resolved' || status === 'closed' ? now : undefined,
+    };
+
+    this.data.studentProblems[index] = updated;
+
+    if (actor) {
+      this.logAuditAction(
+        actor.id,
+        actor.name,
+        actor.role,
+        'Updated Doubt Status',
+        'StudentProblem',
+        problemId,
+        `Changed doubt status to ${status.toUpperCase()}.`
+      );
+    }
+
+    this.notify();
+    return this.getProblemById(problemId);
+  }
+
+  public addProblemResponse(
+    data: {
+      problemId: string;
+      responderProfileId: string;
+      message: string;
+      attachmentName?: string;
+      attachmentUrl?: string;
+    },
+    actor?: { id: string; name: string; role: UserRole }
+  ): ProblemResponse {
+    const now = new Date().toISOString();
+    const newResponse: ProblemResponse = {
+      id: `resp-${Date.now()}`,
+      problem_id: data.problemId,
+      responder_profile_id: data.responderProfileId,
+      message: data.message,
+      attachment_name: data.attachmentName,
+      attachment_url: data.attachmentUrl,
+      created_at: now,
+    };
+
+    if (!this.data.problemResponses) this.data.problemResponses = [];
+    this.data.problemResponses.push(newResponse);
+
+    // Update parent problem timestamp and status
+    const problem = this.getProblemById(data.problemId);
+    if (problem) {
+      const problemIndex = this.data.studentProblems.findIndex(p => p.id === data.problemId);
+      if (problemIndex !== -1) {
+        this.data.studentProblems[problemIndex].updated_at = now;
+        if (this.data.studentProblems[problemIndex].status === 'open') {
+          this.data.studentProblems[problemIndex].status = 'in_progress';
+        }
+      }
+
+      // Notify the other party
+      const isTeacherReplying = actor?.role === 'teacher' || actor?.role === 'administrator';
+      if (isTeacherReplying && problem.student) {
+        this.data.notifications.unshift({
+          id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+          recipient_profile_id: problem.student.profile_id,
+          title: `Teacher Replied to Your Doubt`,
+          message: `Prof. replied: "${data.message.slice(0, 80)}..."`,
+          type: 'recommendation',
+          is_read: false,
+          created_at: now,
+          link: `/student/problems`,
+        });
+      } else if (!isTeacherReplying && problem.teacher) {
+        this.data.notifications.unshift({
+          id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+          recipient_profile_id: problem.teacher.profile_id,
+          title: `New Reply on Doubt: ${problem.title}`,
+          message: `${problem.student?.profile?.full_name || 'Student'}: "${data.message.slice(0, 80)}..."`,
+          type: 'system',
+          is_read: false,
+          created_at: now,
+          link: `/teacher/problems`,
+        });
+      }
+    }
+
+    if (actor) {
+      this.logAuditAction(
+        actor.id,
+        actor.name,
+        actor.role,
+        'Replied to Doubt',
+        'ProblemResponse',
+        newResponse.id,
+        `Replied on doubt thread #${data.problemId}.`
+      );
+    }
+
+    this.notify();
+    return {
+      ...newResponse,
+      responder: this.getProfileById(data.responderProfileId),
+    };
+  }
+
+  // --------------------------------------------------------------------------
+  // ACADEMIC ACTIVITY ANALYTICS
+  // --------------------------------------------------------------------------
+
+  public getAcademicActivitySummary(studentId: string): AcademicActivitySummary {
+    const student = this.getStudentById(studentId);
+    const classId = student?.class_id;
+
+    // Get all published assignments applicable to this student's class
+    const assignments = (this.data.assignments || []).filter(
+      a => (!classId || a.class_id === classId) && a.status !== 'draft'
+    );
+    const submissions = (this.data.assignmentSubmissions || []).filter(s => s.student_id === studentId);
+    const problems = (this.data.studentProblems || []).filter(p => p.student_id === studentId);
+
+    const totalAssignments = assignments.length;
+    const submittedCount = submissions.filter(s => s.status !== 'not_started').length;
+    const lateCount = submissions.filter(s => s.is_late || s.status === 'late').length;
+    const unsubmittedCount = Math.max(0, totalAssignments - submittedCount);
+
+    const gradedSubmissions = submissions.filter(s => s.status === 'graded' && s.marks !== undefined);
+    let avgScorePct = 0;
+    if (gradedSubmissions.length > 0) {
+      const totalScoreEarned = gradedSubmissions.reduce((acc, s) => {
+        const asg = assignments.find(a => a.id === s.assignment_id);
+        const maxMarks = asg?.max_marks || 100;
+        return acc + ((s.marks || 0) / maxMarks) * 100;
+      }, 0);
+      avgScorePct = Number((totalScoreEarned / gradedSubmissions.length).toFixed(1));
+    }
+
+    const openProblems = problems.filter(p => p.status === 'open' || p.status === 'in_progress').length;
+    const resolvedProblems = problems.filter(p => p.status === 'resolved' || p.status === 'closed').length;
+
+    // Determine Academic Activity Level (Healthy, Moderate, Low)
+    let activityLevel: 'Healthy' | 'Moderate' | 'Low' = 'Healthy';
+    const completionRate = totalAssignments > 0 ? (submittedCount / totalAssignments) * 100 : 100;
+
+    if (completionRate < 50 || (totalAssignments > 1 && unsubmittedCount >= 2)) {
+      activityLevel = 'Low';
+    } else if (completionRate < 80 || lateCount >= 2) {
+      activityLevel = 'Moderate';
+    }
+
+    return {
+      student_id: studentId,
+      activity_level: activityLevel,
+      total_assignments: totalAssignments,
+      submitted_assignments: submittedCount,
+      late_submissions: lateCount,
+      unsubmitted_assignments: unsubmittedCount,
+      graded_assignments: gradedSubmissions.length,
+      average_score_pct: avgScorePct,
+      open_problems_count: openProblems,
+      resolved_problems_count: resolvedProblems,
+      notes_viewed_count: 14,
+    };
+  }
+
+  public getAllAcademicActivitySummaries(): AcademicActivitySummary[] {
+    return this.getStudents().map(st => this.getAcademicActivitySummary(st.id));
+  }
 }
 
 export const dataStore = new DataStore();
+

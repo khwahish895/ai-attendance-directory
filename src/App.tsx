@@ -28,6 +28,9 @@ import { TeacherDashboard } from './pages/teacher/TeacherDashboard';
 import { MarkAttendancePage } from './pages/teacher/MarkAttendancePage';
 import { AttendanceHistoryPage } from './pages/teacher/AttendanceHistoryPage';
 import { TeacherStudentsPage } from './pages/teacher/TeacherStudentsPage';
+import { TeacherMaterialsPage } from './pages/teacher/TeacherMaterialsPage';
+import { TeacherAssignmentsPage } from './pages/teacher/TeacherAssignmentsPage';
+import { TeacherDoubtsPage } from './pages/teacher/TeacherDoubtsPage';
 
 // Student Pages
 import { StudentDashboard } from './pages/student/StudentDashboard';
@@ -36,9 +39,11 @@ import { StudentPredictionsPage } from './pages/student/StudentPredictionsPage';
 import { StudentRiskPage } from './pages/student/StudentRiskPage';
 import { StudentRecommendationsPage } from './pages/student/StudentRecommendationsPage';
 import { StudentNotificationsPage } from './pages/student/StudentNotificationsPage';
+import { StudentLearningHubPage } from './pages/student/StudentLearningHubPage';
 
 // Parent Pages
 import { ParentDashboard } from './pages/parent/ParentDashboard';
+import { ParentLearningPage } from './pages/parent/ParentLearningPage';
 
 // Common Pages
 import { ProfilePage } from './pages/common/ProfilePage';
@@ -110,6 +115,8 @@ export default function App() {
               <Route path="/admin/parents" element={<ParentsManagementPage />} />
               <Route path="/admin/classes" element={<ClassesManagementPage />} />
               <Route path="/admin/subjects" element={<SubjectsManagementPage />} />
+              <Route path="/admin/materials" element={<TeacherMaterialsPage />} />
+              <Route path="/admin/assignments" element={<TeacherAssignmentsPage />} />
               <Route path="/admin/attendance" element={<AttendanceHistoryPage />} />
               <Route path="/admin/risk" element={<RiskEnginePage />} />
               <Route path="/admin/predictions" element={<PredictionsPage />} />
@@ -119,6 +126,9 @@ export default function App() {
 
               {/* Teacher Routes */}
               <Route path="/teacher" element={<TeacherDashboard />} />
+              <Route path="/teacher/materials" element={<TeacherMaterialsPage />} />
+              <Route path="/teacher/assignments" element={<TeacherAssignmentsPage />} />
+              <Route path="/teacher/doubts" element={<TeacherDoubtsPage />} />
               <Route path="/teacher/attendance" element={<MarkAttendancePage />} />
               <Route path="/teacher/classes" element={<TeacherDashboard />} />
               <Route path="/teacher/history" element={<AttendanceHistoryPage />} />
@@ -128,6 +138,7 @@ export default function App() {
 
               {/* Student Routes */}
               <Route path="/student" element={<StudentDashboard />} />
+              <Route path="/student/learning" element={<StudentLearningHubPage />} />
               <Route path="/student/attendance" element={<StudentAttendancePage />} />
               <Route path="/student/subjects" element={<StudentAttendancePage />} />
               <Route path="/student/history" element={<StudentAttendancePage />} />
@@ -138,6 +149,7 @@ export default function App() {
 
               {/* Parent Routes */}
               <Route path="/parent" element={<ParentDashboard />} />
+              <Route path="/parent/learning" element={<ParentLearningPage />} />
               <Route path="/parent/student" element={<ParentDashboard />} />
               <Route path="/parent/attendance" element={<ParentDashboard />} />
               <Route path="/parent/risk" element={<ParentDashboard />} />
