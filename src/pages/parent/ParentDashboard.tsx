@@ -5,9 +5,11 @@ import { dataStore } from '../../lib/dataProvider';
 import { riskService } from '../../services/riskService';
 import { predictionService } from '../../services/predictionService';
 import { Student, Parent, AttendanceSummary, RiskAssessment, Attendance, Subject } from '../../types';
+import { IntelligenceEngine } from '../../services/intelligenceEngine';
 import { StatCard } from '../../components/common/StatCard';
 import { RiskBadge } from '../../components/common/RiskBadge';
 import { AttendanceProgress } from '../../components/common/AttendanceProgress';
+import { AiCopilotModal } from '../../components/common/AiCopilotModal';
 import {
   Users,
   GraduationCap,
@@ -21,7 +23,9 @@ import {
   CheckCircle2,
   XCircle,
   MessageSquare,
-  Sparkles
+  Sparkles,
+  Bot,
+  Info
 } from 'lucide-react';
 import { useToast } from '../../contexts/ToastContext';
 
@@ -36,6 +40,7 @@ export const ParentDashboard: React.FC = () => {
   const [risk, setRisk] = useState<RiskAssessment | null>(null);
   const [recentLogs, setRecentLogs] = useState<Attendance[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [isCopilotOpen, setIsCopilotOpen] = useState(false);
 
   const loadData = () => {
     const allParents = dataStore.getParents();
@@ -86,6 +91,11 @@ export const ParentDashboard: React.FC = () => {
     };
   }, [summaries]);
 
+  const parentPlainSummary = useMemo(() => {
+    if (!ward) return null;
+    return IntelligenceEngine.generateParentPlainSummary(ward.id);
+  }, [ward]);
+
   const handleContactFaculty = () => {
     showToast(`Teacher communication channel opened for ${ward?.profile?.full_name}`, 'success');
   };
@@ -109,14 +119,68 @@ export const ParentDashboard: React.FC = () => {
           </p>
         </div>
 
-        <button
-          onClick={handleContactFaculty}
-          className="px-5 py-3 rounded-2xl bg-gradient-to-r from-[#6E63FF] to-[#8677FF] hover:opacity-95 text-white text-xs font-bold shadow-lg shadow-[#6E63FF]/30 transition-all cursor-pointer flex items-center gap-2"
-        >
-          <MessageSquare className="w-4 h-4" />
-          <span>Contact Class Teacher</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setIsCopilotOpen(true)}
+            className="px-4 py-3 rounded-2xl bg-[#050816] hover:bg-white/5 text-white border border-indigo-900/60 text-xs font-bold shadow-lg transition-all cursor-pointer flex items-center gap-2"
+          >
+            <Bot className="w-4 h-4 text-[#8677FF]" />
+            <span>Ask AI Copilot</span>
+          </button>
+
+          <button
+            onClick={handleContactFaculty}
+            className="px-5 py-3 rounded-2xl bg-gradient-to-r from-[#6E63FF] to-[#8677FF] hover:opacity-95 text-white text-xs font-bold shadow-lg shadow-[#6E63FF]/30 transition-all cursor-pointer flex items-center gap-2"
+          >
+            <MessageSquare className="w-4 h-4" />
+            <span>Contact Class Teacher</span>
+          </button>
+        </div>
       </div>
+
+      {/* 👨‍👩‍👧 Parent AI Plain-Language Summary Box */}
+      {parentPlainSummary && (
+        <div className="p-6 rounded-3xl bg-gradient-to-br from-[#0B1035] to-[#050816] border border-indigo-500/30 shadow-xl space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-2xl bg-[#6E63FF]/20 border border-[#6E63FF]/40 flex items-center justify-center">
+                <Sparkles className="w-5 h-5 text-[#8677FF]" />
+              </div>
+              <div>
+                <span className="text-[10px] font-mono uppercase text-[#8677FF] font-bold">
+                  AI Family Academic Summary
+                </span>
+                <h3 className="text-sm font-extrabold text-white">
+                  {parentPlainSummary.headline}
+                </h3>
+              </div>
+            </div>
+            <span className="text-xl">{parentPlainSummary.statusEmoji}</span>
+          </div>
+
+          <p className="text-xs text-slate-300 leading-relaxed bg-[#050816] p-4 rounded-2xl border border-white/5">
+            {parentPlainSummary.parentSummary}
+          </p>
+
+          <div className="space-y-2">
+            <div className="text-[11px] font-bold text-white flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <span>Recommended Next Steps for Guardian:</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {parentPlainSummary.actionSteps.map((step, idx) => (
+                <div
+                  key={idx}
+                  className="p-3 rounded-xl bg-[#0B1035] border border-white/5 text-xs text-slate-300 flex items-start gap-2"
+                >
+                  <span className="text-[#8677FF] font-bold">•</span>
+                  <span>{step}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Ward Overview Header Card */}
       <div className="p-6 rounded-3xl bg-[#0B1035] border border-indigo-900/40 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
@@ -312,6 +376,11 @@ export const ParentDashboard: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <AiCopilotModal
+        isOpen={isCopilotOpen}
+        onClose={() => setIsCopilotOpen(false)}
+      />
     </div>
   );
 };

@@ -401,3 +401,85 @@ export interface AcademicActivitySummary {
   notes_viewed_count: number;
 }
 
+export interface DayDistribution {
+  day: 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday';
+  absentCount: number;
+  presentCount: number;
+  absencePercentage: number;
+}
+
+export interface StudentAttendanceDNA {
+  student_id: string;
+  consistency_score: number; // 0 - 100
+  trend_momentum: 'improving' | 'declining' | 'stable';
+  absenteeism_archetype: string;
+  recovery_potential: 'High' | 'Moderate' | 'Critical';
+  persona_tag: string;
+  affected_subject_id?: string;
+  affected_subject_name?: string;
+  recommendation_summary: string;
+  day_distribution: DayDistribution[];
+  morning_absence_rate: number; // % of misses in period 1
+  consecutive_risk_score: number;
+}
+
+export interface EarlyWarningRecord {
+  student_id: string;
+  student_name: string;
+  roll_number: string;
+  class_name: string;
+  current_attendance: number;
+  recent_attendance: number;
+  predicted_attendance: number;
+  trend: 'improving' | 'declining' | 'stable';
+  consecutive_absences: number;
+  warning_severity: 'imminent_breach' | 'downward_spiral' | 'pattern_alert';
+  why_flagged: string[];
+  recommended_action: string;
+  target_intervention_level: 1 | 2 | 3 | 4;
+}
+
+export interface SmartIntervention {
+  id: string;
+  student_id: string;
+  student_name: string;
+  roll_number: string;
+  class_name: string;
+  level: 1 | 2 | 3 | 4;
+  target_audience: 'student' | 'student_parent' | 'teacher_counseling' | 'administrator_escalation';
+  status: 'resolved' | 'monitoring' | 'escalated' | 'new';
+  initial_attendance: number;
+  post_attendance?: number;
+  delta?: number;
+  is_successful?: boolean;
+  issued_at: string;
+  evaluated_at?: string;
+  action_summary: string;
+  trigger_reason: string;
+}
+
+export interface AttendanceBadge {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  badge_tier: 'bronze' | 'silver' | 'gold' | 'diamond';
+  is_unlocked: boolean;
+  unlocked_at?: string;
+  progress_pct: number;
+  next_milestone_text: string;
+}
+
+export interface AssignmentAiAnalysis {
+  completeness_score: number; // 0 - 100
+  topic_coverage_score: number; // 0 - 100
+  structure_grade: 'Excellent' | 'Good' | 'Needs Improvement';
+  grammar_quality: 'High' | 'Moderate' | 'Needs Polish';
+  missing_sections: string[];
+  strengths: string[];
+  suggested_improvements: string[];
+  overall_feedback: string;
+  analyzed_at: string;
+}
+
+

@@ -40,6 +40,8 @@ import { FileViewerModal } from '../../components/learning/FileViewerModal';
 import { StudentSubmitModal } from '../../components/learning/StudentSubmitModal';
 import { ProblemThreadModal } from '../../components/learning/ProblemThreadModal';
 import { AssignmentCalendarModal } from '../../components/learning/AssignmentCalendarModal';
+import { AiDoubtSolverModal } from '../../components/learning/AiDoubtSolverModal';
+import { AiAssignmentAnalyzerModal } from '../../components/learning/AiAssignmentAnalyzerModal';
 
 export const StudentLearningHubPage: React.FC = () => {
   const { user } = useAuth();
@@ -75,6 +77,8 @@ export const StudentLearningHubPage: React.FC = () => {
   const [selectedProblem, setSelectedProblem] = useState<StudentProblem | null>(null);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isNewProblemModalOpen, setIsNewProblemModalOpen] = useState(false);
+  const [aiDoubtMaterial, setAiDoubtMaterial] = useState<LearningMaterial | null>(null);
+  const [aiAnalyzerAssignment, setAiAnalyzerAssignment] = useState<Assignment | null>(null);
 
   // New problem form
   const [newProblemData, setNewProblemData] = useState({
@@ -485,26 +489,38 @@ export const StudentLearningHubPage: React.FC = () => {
 
                     {/* Footer Actions */}
                     <div className="pt-4 mt-4 border-t border-border flex items-center justify-between text-xs">
-                      <div className="text-muted-foreground">
+                      <div className="text-muted-foreground flex items-center gap-1.5">
                         <span>Due: {new Date(asg.due_date).toLocaleDateString()}</span>
-                        <span className="mx-1.5">•</span>
+                        <span className="mx-1">•</span>
                         <span>Max {asg.max_marks} pts</span>
                       </div>
 
-                      <button
-                        id={`btn-submit-asg-${asg.id}`}
-                        onClick={() => setSubmittingAssignment(asg)}
-                        className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold transition-colors shadow-xs ${
-                          isGraded
-                            ? 'bg-muted hover:bg-muted/80 text-foreground'
-                            : isSubmitted
-                            ? 'bg-secondary hover:bg-secondary/80 text-secondary-foreground'
-                            : 'bg-primary text-primary-foreground hover:bg-primary/90'
-                        }`}
-                      >
-                        <span>{isGraded ? 'View Submitted Work' : isSubmitted ? 'Resubmit / Edit' : 'Submit Work'}</span>
-                        <ChevronRight className="w-3.5 h-3.5" />
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setAiAnalyzerAssignment(asg)}
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 text-xs font-semibold hover:bg-purple-500/20 transition-colors"
+                          title="Run pre-submission AI evaluation"
+                        >
+                          <Sparkles className="w-3 h-3" />
+                          <span>AI Check</span>
+                        </button>
+
+                        <button
+                          id={`btn-submit-asg-${asg.id}`}
+                          onClick={() => setSubmittingAssignment(asg)}
+                          className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold transition-colors shadow-xs ${
+                            isGraded
+                              ? 'bg-muted hover:bg-muted/80 text-foreground'
+                              : isSubmitted
+                              ? 'bg-secondary hover:bg-secondary/80 text-secondary-foreground'
+                              : 'bg-primary text-primary-foreground hover:bg-primary/90'
+                          }`}
+                        >
+                          <span>{isGraded ? 'View Submitted Work' : isSubmitted ? 'Resubmit / Edit' : 'Submit Work'}</span>
+                          <ChevronRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 );
@@ -559,6 +575,15 @@ export const StudentLearningHubPage: React.FC = () => {
                       </span>
 
                       <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setAiDoubtMaterial(mat)}
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-400 text-xs font-semibold border border-purple-500/20 transition-colors"
+                          title="Ask AI questions grounded in this study material"
+                        >
+                          <Sparkles className="w-3 h-3" />
+                          <span>AI Solver</span>
+                        </button>
+
                         <button
                           onClick={() => handleOpenMaterial(mat)}
                           className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary text-xs font-semibold transition-colors"
@@ -841,6 +866,22 @@ export const StudentLearningHubPage: React.FC = () => {
             </form>
           </div>
         </div>
+      )}
+
+      {/* 6. AI Doubt Solver Grounded in Notes */}
+      <AiDoubtSolverModal
+        isOpen={!!aiDoubtMaterial}
+        onClose={() => setAiDoubtMaterial(null)}
+        material={aiDoubtMaterial}
+      />
+
+      {/* 7. AI Assignment Submission Analyzer */}
+      {aiAnalyzerAssignment && (
+        <AiAssignmentAnalyzerModal
+          isOpen={!!aiAnalyzerAssignment}
+          onClose={() => setAiAnalyzerAssignment(null)}
+          assignment={aiAnalyzerAssignment}
+        />
       )}
     </div>
   );
