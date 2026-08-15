@@ -1,0 +1,6 @@
+{
+  "name": "AI Attendance Predictor & Risk Detection System",
+  "description": "Production-grade AI-based student attendance prediction, risk classification, absenteeism detection, and educational analytics platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
